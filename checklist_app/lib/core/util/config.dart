@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 class Config {
   static bool get isAndroid => Platform.isAndroid;
   static bool get isIOS => Platform.isIOS;
+  static bool get isMacOS => Platform.isMacOS;
 
   static bool isPotrait(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -56,6 +57,12 @@ class Config {
 
   static TextStyle b2(BuildContext context) => GoogleFonts.sora(
         fontSize: textSize(context, 1.5),
+        height: 1.6,
+      );
+
+  static TextStyle b2b(BuildContext context) => GoogleFonts.sora(
+        fontSize: textSize(context, 1.5),
+        fontWeight: FontWeight.w700,
         height: 1.6,
       );
 
