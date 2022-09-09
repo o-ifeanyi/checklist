@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func Middleware(DB *mongo.Database) gin.HandlerFunc {
+func AuthMiddleware(DB *mongo.Database) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
@@ -21,6 +21,15 @@ func Middleware(DB *mongo.Database) gin.HandlerFunc {
 			return
 		}
 		c.Set("userid", userID)
+		c.Next()
+	}
+}
+
+func HeaderMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE")
+		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 		c.Next()
 	}
 }

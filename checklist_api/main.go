@@ -12,6 +12,7 @@ import (
 func main() {
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
+	router.Use(util.HeaderMiddleware())
 
 	as := service.NewAuthService(config.DB)
 	ah := handler.NewAuthHandler(as)
@@ -19,7 +20,7 @@ func main() {
 	auth.POST("/register", ah.HandleRegister)
 	auth.POST("/login", ah.HandleLogin)
 
-	router.Use(util.Middleware(config.DB))
+	router.Use(util.AuthMiddleware(config.DB))
 	router.GET("/logout", ah.HandleLogout)
 
 	router.Run(":8080")
