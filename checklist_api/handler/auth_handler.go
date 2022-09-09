@@ -2,6 +2,7 @@ package handler
 
 import (
 	inter "checklist/checklist_api/interface"
+	"checklist/checklist_api/model"
 	"checklist/checklist_api/util"
 	"encoding/json"
 	"errors"
@@ -40,7 +41,10 @@ func (ah AuthHandler) HandleRegister(c *gin.Context) {
 	c.Header("Token", token)
 	c.Header("Content-Type", "application/json")
 	c.Header("Access-Control-Expose-Headers", "Token")
-	c.String(http.StatusCreated, "%s\n", "registration successful")
+	c.JSON(http.StatusCreated, model.Response{
+		Status:  http.StatusCreated,
+		Message: "success",
+	})
 }
 
 func (ah AuthHandler) HandleLogin(c *gin.Context) {
@@ -60,7 +64,10 @@ func (ah AuthHandler) HandleLogin(c *gin.Context) {
 	c.Header("Token", token)
 	c.Header("Content-Type", "application/json")
 	c.Header("Access-Control-Expose-Headers", "Token")
-	c.String(http.StatusOK, "%s", "login successful")
+	c.JSON(http.StatusOK, model.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+	})
 }
 
 func (ah AuthHandler) HandleLogout(c *gin.Context) {
@@ -74,5 +81,8 @@ func (ah AuthHandler) HandleLogout(c *gin.Context) {
 
 	c.Header("Content-Type", "application/json")
 	c.Header("Access-Control-Expose-Headers", "Token")
-	c.String(http.StatusOK, "%s", "logout successful")
+	c.JSON(http.StatusOK, model.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+	})
 }
