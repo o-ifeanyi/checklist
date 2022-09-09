@@ -24,7 +24,8 @@ class CustomSnackBar extends StatelessWidget {
           padding: Config.contentPadding(context, h: 5, v: 2),
           width: size.width,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius:
+                const BorderRadius.vertical(bottom: Radius.circular(5)),
             color: snackbarModel.status == Status.success
                 ? kGreenAccent
                 : Theme.of(context).errorColor,
