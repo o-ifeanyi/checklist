@@ -1,10 +1,17 @@
 import 'package:checklist_app/core/util/themes.dart';
+import 'package:checklist_app/model/checklist.dart';
 import 'package:hive/hive.dart';
 
 class HiveService {
   final Box appDataBox;
+  final Box checklistBox;
+  final Box syncBox;
 
-  HiveService({required this.appDataBox});
+  HiveService({
+    required this.appDataBox,
+    required this.checklistBox,
+    required this.syncBox,
+  });
 
   Future<void> setToken(String token) async {
     return appDataBox.put('token', token);
@@ -16,5 +23,38 @@ class HiveService {
 
   Future<void> setTheme(ThemeOptions themeOption) async {
     return appDataBox.put('theme', themeOption.name);
+  }
+
+  Future<void> insert(ChecklistModel checklist) async {
+    return checklistBox.put(checklist.id, checklist.toMap());
+  }
+
+  Future<void> insertAll(List<ChecklistModel> checklists,
+      {bool clearSync = true}) async {
+    final Map<dynamic, dynamic> data = {};
+    for (var checklist in checklists) {
+      data[checklist.id] = checklist.toMap();
+    }
+    await checklistBox.putAll(data);
+    if (clearSync) await syncBox.clear();
+    return;
+  }
+
+  Future<void> delete(String id) async {
+    return checklistBox.delete(id);
+  }
+
+  Future<void> syncLater(ChecklistModel checklist) async {
+    return syncBox.put(checklist.id, checklist.toMap());
+  }
+
+  Future<List<ChecklistModel>> allSyncLater() async {
+    final data = syncBox.values.toList();
+    return data.map((e) => ChecklistModel.fromJson(e)).toList();
+  }
+
+  Future<List<ChecklistModel>> allChecklist() async {
+    final data = checklistBox.values.toList();
+    return data.map((e) => ChecklistModel.fromJson(e)).toList();
   }
 }
