@@ -8,25 +8,24 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class NetworkConnectivityService {
-  final StreamController<ConnectivityResult> _connectivityStreamController =
-      StreamController<ConnectivityResult>();
-  NetworkConnectivityService() {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      _connectivityStreamController.add(result);
-    });
-  }
-
-  Stream<ConnectivityResult> get stream => _connectivityStreamController.stream;
-
-  void dispose() => _connectivityStreamController.close();
-}
-
 class NetworkService {
   final Dio dio;
   final HiveService hiveService;
+  final Connectivity connectivity;
 
-  NetworkService({required this.dio, required this.hiveService});
+  ConnectivityResult connection = ConnectivityResult.none;
+  bool get hasConnection =>
+      connection == ConnectivityResult.mobile ||
+      connection == ConnectivityResult.wifi;
+
+  NetworkService(
+      {required this.dio,
+      required this.hiveService,
+      required this.connectivity}) {
+    connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      connection = result;
+    });
+  }
 
   Future<Response> post({
     required String path,
@@ -50,10 +49,11 @@ class NetworkService {
     } on CustomException {
       rethrow;
     } on DioError catch (error) {
-      debugPrint('${error.message}');
-      throw CustomException(message: '${error.response?.data['message']}');
+      debugPrint('DIO ${error.message}');
+      throw CustomException(
+          message: '${error.response?.data['message'] ?? 'sync failure'}');
     } catch (error) {
-      debugPrint('$error');
+      debugPrint('CATCH $error');
       throw CustomException(message: '$error');
     }
   }
