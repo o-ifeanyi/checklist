@@ -4,6 +4,7 @@ import 'package:checklist_app/core/util/themes.dart';
 import 'package:checklist_app/env/env.dart';
 import 'package:checklist_app/injection_container.dart';
 import 'package:checklist_app/provider/auth_provider.dart';
+import 'package:checklist_app/provider/checklist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => sl<AuthProvider>()),
+      ChangeNotifierProvider(create: (_) => sl<ChecklistProvider>()),
     ],
     child: const MyApp(),
   ));
