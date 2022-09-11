@@ -35,3 +35,9 @@ func init() {
 // register: curl -v -H "Content-Type: application/json" -d '{"email":"ifeanyi@gmail.com","password":"never4get"}' http://localhost:8080/auth/register
 // login: curl -v -H "Content-Type: application/json" -d '{"email":"ifeanyi@gmail.com","password":"never4get"}' http://localhost:8080/auth/login
 // logout: curl -v -H "Authorization: <token>" http://localhost:8080/logout
+
+// create: curl -v -H "Authorization: <token>" -d '{"id":"ifeanyi@gmail.com","title":"test checklist", "action":"create", "items":[{"text":"first task", "done":true}]}' http://localhost:8080/user/create
+// update: curl -v -H "Authorization: <token>" -d '{"id":"ifeanyi@gmail.com","title":"test checklist updated", "action":"create", "items":[{"text":"first task", "done":true}]}' http://localhost:8080/user/update
+// delete: curl -v -X DELETE -H "Authorization: <token>" http://localhost:8080/user/delete/ifeanyi@gmail.com
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmE1NDA1OTEtN2VhZi00ODk3LWI2YzctNjQ1ODVjMDNkNjYyIn0._YWwMiHqg-AflJ3Byesu_IEeM5pISIRUH4tsbdiY4LA
