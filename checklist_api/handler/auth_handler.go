@@ -39,7 +39,6 @@ func (ah AuthHandler) HandleRegister(c *gin.Context) {
 	}
 
 	c.Header("Token", token)
-	c.Header("Content-Type", "application/json")
 	c.Header("Access-Control-Expose-Headers", "Token")
 	c.JSON(http.StatusCreated, model.Response{
 		Status:  http.StatusCreated,
@@ -62,7 +61,6 @@ func (ah AuthHandler) HandleLogin(c *gin.Context) {
 	}
 
 	c.Header("Token", token)
-	c.Header("Content-Type", "application/json")
 	c.Header("Access-Control-Expose-Headers", "Token")
 	c.JSON(http.StatusOK, model.Response{
 		Status:  http.StatusOK,
@@ -79,8 +77,6 @@ func (ah AuthHandler) HandleLogout(c *gin.Context) {
 		return
 	}
 
-	c.Header("Content-Type", "application/json")
-	c.Header("Access-Control-Expose-Headers", "Token")
 	c.JSON(http.StatusOK, model.Response{
 		Status:  http.StatusOK,
 		Message: "success",
