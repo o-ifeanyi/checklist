@@ -4,4 +4,4 @@ typedef JsonMap = Map<String, dynamic>;
 
 final kBaseUrl = Env().config.baseUrl;
 
-enum kHiveBoxes { appDataBox, users }
+enum kHiveBoxes { appData, checklist, sync }
