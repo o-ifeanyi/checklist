@@ -34,7 +34,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<CustomException, bool>> logout() async {
     try {
-      await networkService.get(path: 'logout');
+      await networkService.get(path: 'user/logout');
       await hiveService.setToken('');
       return const Right(true);
     } on CustomException catch (e) {
