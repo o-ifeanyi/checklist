@@ -40,9 +40,9 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> login(UserModel user) async {
     setState(AuthState.login);
-    final regEither = await authRepository.login(user);
+    final logEither = await authRepository.login(user);
     setState(AuthState.idle);
-    return regEither.fold(
+    return logEither.fold(
       (exc) {
         snackBarService.displayMessage(exc.message);
         return false;
@@ -53,9 +53,9 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> logout() async {
     setState(AuthState.logout);
-    final regEither = await authRepository.logout();
+    final logEither = await authRepository.logout();
     setState(AuthState.idle);
-    return regEither.fold(
+    return logEither.fold(
       (exc) {
         snackBarService.displayMessage(exc.message);
         return false;
