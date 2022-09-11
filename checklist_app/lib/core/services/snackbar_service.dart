@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:overlay_support/overlay_support.dart';
 
 enum DisplayType { snackbar, dialog }
+
 enum Status { success, failed }
 
 class SnackbarModel {

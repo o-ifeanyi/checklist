@@ -1,7 +1,10 @@
 import 'package:checklist_app/core/platform_specific/platform_alert_dialog.dart';
+import 'package:checklist_app/core/services/connection_service.dart';
 import 'package:checklist_app/core/services/snackbar_service.dart';
 import 'package:checklist_app/core/util/config.dart';
+import 'package:checklist_app/injection_container.dart';
 import 'package:checklist_app/view/widget/custom_snackbar.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -21,9 +24,11 @@ class _AppAwareState extends State<AppAware> {
   OverlaySupportEntry? _snackBarEntry;
   OverlaySupportEntry? _dialogEntry;
   late SnackBarService _snackBarService;
+  late ConnectionService _connectionService;
   @override
   void initState() {
     _snackBarService = SnackBarService();
+    _connectionService = sl<ConnectionService>();
     _snackBarService.stream.listen((event) {
       if (event.displayType == DisplayType.dialog) {
         _dialogEntry?.dismiss();
@@ -70,6 +75,27 @@ class _AppAwareState extends State<AppAware> {
         HapticFeedback.mediumImpact();
       }
     });
+    _connectionService.stream.listen(
+      (event) {
+        switch (event) {
+          case ConnectivityResult.none:
+            _snackBarEntry = showOverlayNotification(
+              (context) {
+                return CustomSnackBar(
+                  snackbarModel: SnackbarModel(
+                      title: 'oops!', message: 'Looks like you\'re offline'),
+                  onDismiss: _snackBarEntry!.dismiss,
+                );
+              },
+              position: NotificationPosition.top,
+              duration: const Duration(seconds: 4),
+            );
+            break;
+          default:
+            _snackBarEntry?.dismiss();
+        }
+      },
+    );
     super.initState();
   }
 
