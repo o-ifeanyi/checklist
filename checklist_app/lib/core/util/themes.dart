@@ -51,12 +51,6 @@ final lightTheme = ThemeData(
     foregroundColor: Colors.black,
     elevation: 0,
   ),
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: const Color(0xFFFAFAFA),
-    elevation: 0,
-    selectedItemColor: Colors.black,
-    unselectedItemColor: const Color(0xFFBBBBBB),
-  ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   colorScheme: ColorScheme.fromSwatch(primarySwatch: lightPriSwatch).copyWith(
     secondary: const Color(0xFFBBBBBB),
@@ -64,6 +58,7 @@ final lightTheme = ThemeData(
   ),
   dividerColor: const Color(0xFFDFDFDF),
   inputDecorationTheme: InputDecorationTheme(
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
     ),
@@ -86,12 +81,6 @@ final darkTheme = ThemeData(
     foregroundColor: Colors.white,
     elevation: 0,
   ),
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: const Color(0xFF2E2E2E),
-    elevation: 0,
-    selectedItemColor: Colors.white,
-    unselectedItemColor: const Color(0xFF545454),
-  ),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   colorScheme: ColorScheme.fromSwatch(primarySwatch: darkPriSwatch).copyWith(
     secondary: const Color(0xFF545454),
@@ -99,6 +88,7 @@ final darkTheme = ThemeData(
   ),
   dividerColor: const Color(0xFF7A7A7A),
   inputDecorationTheme: InputDecorationTheme(
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     border: OutlineInputBorder(
       borderSide: const BorderSide(color: Color(0xFF545454)),
       borderRadius: BorderRadius.circular(12),
