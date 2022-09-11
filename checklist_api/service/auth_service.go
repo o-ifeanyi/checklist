@@ -50,6 +50,7 @@ func (as AuthService) Create(email, password string) (string, error) {
 	user := model.User{}
 
 	if user, err := as.FindByEmail(email); err == nil && user.Email != "" {
+		log.Println(err)
 		return "", errors.New("user already exist")
 	}
 
@@ -62,6 +63,7 @@ func (as AuthService) Create(email, password string) (string, error) {
 	user.Id = uuid.NewString()
 	token, tokenErr := util.GenerateToken(user.Id)
 	if tokenErr != nil {
+		log.Println(tokenErr)
 		return "", errors.New("generate user token failed")
 	}
 
@@ -83,22 +85,26 @@ func (as AuthService) Login(email, password string) (string, error) {
 
 	user, err := as.FindByEmail(email)
 	if err != nil {
+		log.Println(err)
 		return "", errors.New("wrong email or password")
 	}
 
 	err = bcrypt.CompareHashAndPassword(user.Password, []byte(password))
 	if err != nil {
+		log.Println(err)
 		return "", errors.New("wrong password or email")
 	}
 
 	token, tokenErr := util.GenerateToken(user.Id)
 	if tokenErr != nil {
+		log.Println(tokenErr)
 		return "", errors.New("generate user token failed")
 	}
 
 	user.Session = util.GetIdentifier(token)
 	_, updateErr := as.DB.Collection("users").UpdateOne(context.Background(), bson.M{"email": user.Email}, bson.M{"$set": &user})
 	if updateErr != nil {
+		log.Println(updateErr)
 		return "", updateErr
 	}
 
@@ -108,12 +114,14 @@ func (as AuthService) Login(email, password string) (string, error) {
 func (as AuthService) Logout(userId string) error {
 	user, err := as.FindById(userId)
 	if err != nil {
+		log.Println(err)
 		return errors.New("user not found")
 
 	}
 	user.Session = ""
 	_, updateErr := as.DB.Collection("users").UpdateOne(context.Background(), bson.M{"id": user.Id}, bson.M{"$set": &user})
 	if updateErr != nil {
+		log.Println(updateErr)
 		return updateErr
 	}
 	return nil
