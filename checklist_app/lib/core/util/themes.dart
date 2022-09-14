@@ -58,7 +58,6 @@ final lightTheme = ThemeData(
   ),
   dividerColor: const Color(0xFFDFDFDF),
   inputDecorationTheme: InputDecorationTheme(
-    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
     ),
@@ -88,7 +87,6 @@ final darkTheme = ThemeData(
   ),
   dividerColor: const Color(0xFF7A7A7A),
   inputDecorationTheme: InputDecorationTheme(
-    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     border: OutlineInputBorder(
       borderSide: const BorderSide(color: Color(0xFF545454)),
       borderRadius: BorderRadius.circular(12),
