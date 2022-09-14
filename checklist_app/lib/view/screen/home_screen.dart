@@ -50,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: InputDecoration(
                         labelText: 'Title',
                         errorStyle: Config.b2(context),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
                       ),
                       onChanged: (val) {},
                     ),
