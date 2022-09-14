@@ -1,26 +1,24 @@
 package service
 
 import (
+	inter "checklist/checklist_api/interface"
 	"checklist/checklist_api/model"
-	"context"
 	"errors"
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type ChecklistService struct {
-	DB *mongo.Database
+	DB inter.MongoInterface
 }
 
-func NewChecklistService(DB *mongo.Database) ChecklistService {
+func NewChecklistService(DB inter.MongoInterface) ChecklistService {
 	return ChecklistService{DB: DB}
 }
 
-func (cs ChecklistService) Sync(checklists []model.Checklist) ([]model.Checklist, error) {
-	items := []model.Checklist{}
-	for _, checklist := range items {
+func (cs ChecklistService) Sync(userId string, checklists []model.Checklist) ([]model.Checklist, error) {
+	for _, checklist := range checklists {
 		switch checklist.Action {
 		case "create":
 			cs.Create(checklist)
@@ -31,7 +29,7 @@ func (cs ChecklistService) Sync(checklists []model.Checklist) ([]model.Checklist
 		}
 	}
 
-	items, err := cs.GetAll(checklists[0].UserId)
+	items, err := cs.GetAll(userId)
 	if err != nil {
 		log.Println(err)
 		return items, err
@@ -40,42 +38,42 @@ func (cs ChecklistService) Sync(checklists []model.Checklist) ([]model.Checklist
 }
 
 func (cs ChecklistService) GetAll(userId string) ([]model.Checklist, error) {
-	items := []model.Checklist{}
+	var items []model.Checklist
 
-	cur, err := cs.DB.Collection("checklist").Find(context.Background(), bson.M{"userId": userId})
+	items, err := cs.DB.AllChecklist(bson.M{"userId": userId})
 	if err != nil {
 		log.Println(err)
-		return items, errors.New("error finding items")
+		return items, errors.New("items not found")
 	}
-	cur.All(context.Background(), &items)
+
 	return items, nil
 }
 
 func (cs ChecklistService) Create(checklist model.Checklist) error {
-	_, insertErr := cs.DB.Collection("checklist").InsertOne(context.Background(), checklist)
+	insertErr := cs.DB.Insert("checklist", checklist)
 	if insertErr != nil {
 		log.Println(insertErr)
-		return insertErr
+		return errors.New("create checklist failed")
 	}
 
 	return nil
 }
 
 func (cs ChecklistService) Update(checklist model.Checklist) error {
-	_, updateErr := cs.DB.Collection("checklist").UpdateOne(context.Background(), bson.M{"id": checklist.Id}, bson.M{"$set": &checklist})
+	updateErr := cs.DB.Update("checklist", bson.M{"id": checklist.Id}, checklist)
 	if updateErr != nil {
 		log.Println(updateErr)
-		return updateErr
+		return errors.New("update checklist failed")
 	}
 
 	return nil
 }
 
 func (cs ChecklistService) Delete(checklistId string) error {
-	_, deleteErr := cs.DB.Collection("checklist").DeleteOne(context.Background(), bson.M{"id": checklistId})
+	deleteErr := cs.DB.Delete("checklist", bson.M{"id": checklistId})
 	if deleteErr != nil {
 		log.Println(deleteErr)
-		return deleteErr
+		return errors.New("delete checklist failed")
 	}
 
 	return nil
