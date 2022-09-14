@@ -26,7 +26,7 @@ func NewChecklistHandler(CI inter.ChecklistInterface) ChecklistHandler {
 func (ch ChecklistHandler) HandleSync(c *gin.Context) {
 	userId := c.GetString("userid")
 	param := syncReqParam{}
-	err := json.NewDecoder(c.Request.Body).Decode(&param)
+	err := c.ShouldBindJSON(&param)
 	if err != nil {
 		util.InternalServerError(c, errors.New("error decoding form"))
 		return
@@ -36,7 +36,7 @@ func (ch ChecklistHandler) HandleSync(c *gin.Context) {
 		param.Data[i].UserId = userId
 	}
 
-	res, err := ch.CI.Sync(param.Data)
+	res, err := ch.CI.Sync(userId, param.Data)
 	if err != nil {
 		util.InternalServerError(c, err)
 		return
@@ -52,7 +52,8 @@ func (ch ChecklistHandler) HandleSync(c *gin.Context) {
 func (ch ChecklistHandler) HandleCreate(c *gin.Context) {
 	userId := c.GetString("userid")
 	cl := model.Checklist{}
-	err := json.NewDecoder(c.Request.Body).Decode(&cl)
+
+	err := c.ShouldBindJSON(&cl)
 	if err != nil {
 		util.InternalServerError(c, errors.New("error decoding form"))
 		return

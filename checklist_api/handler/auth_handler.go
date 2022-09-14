@@ -4,7 +4,6 @@ import (
 	inter "checklist/checklist_api/interface"
 	"checklist/checklist_api/model"
 	"checklist/checklist_api/util"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -26,7 +25,7 @@ func NewAuthHandler(AI inter.AuthInterface) AuthHandler {
 
 func (ah AuthHandler) HandleRegister(c *gin.Context) {
 	rp := regParam{}
-	err := json.NewDecoder(c.Request.Body).Decode(&rp)
+	err := c.ShouldBindJSON(&rp)
 	if err != nil {
 		util.InternalServerError(c, errors.New("error decoding form"))
 		return
@@ -48,7 +47,7 @@ func (ah AuthHandler) HandleRegister(c *gin.Context) {
 
 func (ah AuthHandler) HandleLogin(c *gin.Context) {
 	rp := regParam{}
-	err := json.NewDecoder(c.Request.Body).Decode(&rp)
+	err := c.ShouldBindJSON(&rp)
 	if err != nil {
 		util.InternalServerError(c, errors.New("error decoding form"))
 		return
