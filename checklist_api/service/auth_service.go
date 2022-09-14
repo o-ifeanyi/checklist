@@ -1,55 +1,52 @@
 package service
 
 import (
+	inter "checklist/checklist_api/interface"
 	"checklist/checklist_api/model"
 	"checklist/checklist_api/util"
-	"context"
 	"errors"
 	"log"
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthService struct {
-	DB *mongo.Database
+	DB inter.MongoInterface
 }
 
-func NewAuthService(DB *mongo.Database) AuthService {
+func NewAuthService(DB inter.MongoInterface) AuthService {
 	return AuthService{DB: DB}
 }
 
 func (as AuthService) FindById(userID string) (model.User, error) {
-	user := model.User{}
 
-	res := as.DB.Collection("users").FindOne(context.Background(), bson.M{"id": userID})
-
-	err := res.Decode(&user)
+	user, err := as.DB.FindUser(bson.M{"id": userID})
 	if err != nil {
-		return user, err
+		log.Println(err)
+		return user, errors.New("user not found")
 	}
 
 	return user, nil
 }
 
 func (as AuthService) FindByEmail(email string) (model.User, error) {
-	user := model.User{}
-	res := as.DB.Collection("users").FindOne(context.Background(), bson.M{"email": email})
 
-	err := res.Decode(&user)
+	user, err := as.DB.FindUser(bson.M{"email": email})
 	if err != nil {
-		return user, err
+		log.Println(err)
+		return user, errors.New("user not found")
 	}
 
 	return user, nil
 }
 
 func (as AuthService) Create(email, password string) (string, error) {
-	user := model.User{}
 
-	if user, err := as.FindByEmail(email); err == nil && user.Email != "" {
+	user, err := as.DB.FindUser(bson.M{"email": email})
+
+	if err == nil && user.Email != "" {
 		log.Println(err)
 		return "", errors.New("user already exist")
 	}
@@ -64,14 +61,14 @@ func (as AuthService) Create(email, password string) (string, error) {
 	token, tokenErr := util.GenerateToken(user.Id)
 	if tokenErr != nil {
 		log.Println(tokenErr)
-		return "", errors.New("generate user token failed")
+		return "", tokenErr
 	}
 
 	user.Email = email
 	user.Password = bs
 	user.Session = util.GetIdentifier(token)
 
-	_, insertErr := as.DB.Collection("users").InsertOne(context.Background(), user)
+	insertErr := as.DB.Insert("users", user)
 	if insertErr != nil {
 		log.Println(insertErr)
 		return "", insertErr
@@ -81,7 +78,6 @@ func (as AuthService) Create(email, password string) (string, error) {
 }
 
 func (as AuthService) Login(email, password string) (string, error) {
-	user := model.User{}
 
 	user, err := as.FindByEmail(email)
 	if err != nil {
@@ -102,7 +98,7 @@ func (as AuthService) Login(email, password string) (string, error) {
 	}
 
 	user.Session = util.GetIdentifier(token)
-	_, updateErr := as.DB.Collection("users").UpdateOne(context.Background(), bson.M{"email": user.Email}, bson.M{"$set": &user})
+	updateErr := as.DB.Update("users", bson.M{"email": user.Email}, user)
 	if updateErr != nil {
 		log.Println(updateErr)
 		return "", updateErr
@@ -119,7 +115,7 @@ func (as AuthService) Logout(userId string) error {
 
 	}
 	user.Session = ""
-	_, updateErr := as.DB.Collection("users").UpdateOne(context.Background(), bson.M{"id": user.Id}, bson.M{"$set": &user})
+	updateErr := as.DB.Update("users", bson.M{"id": user.Id}, user)
 	if updateErr != nil {
 		log.Println(updateErr)
 		return updateErr
