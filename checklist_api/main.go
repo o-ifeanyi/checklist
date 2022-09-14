@@ -14,12 +14,13 @@ func main() {
 	router.SetTrustedProxies(nil)
 	router.Use(util.HeaderMiddleware())
 
-	ah := handler.NewAuthHandler(service.NewAuthService(config.DB))
+	ms := service.NewMongoService(config.DB)
+	ah := handler.NewAuthHandler(service.NewAuthService(ms))
 	auth := router.Group("/auth")
 	auth.POST("/register", ah.HandleRegister)
 	auth.POST("/login", ah.HandleLogin)
 
-	ch := handler.NewChecklistHandler(service.NewChecklistService(config.DB))
+	ch := handler.NewChecklistHandler(service.NewChecklistService(ms))
 	user := router.Group("/user")
 	user.Use(util.AuthMiddleware())
 	user.GET("/logout", ah.HandleLogout)
