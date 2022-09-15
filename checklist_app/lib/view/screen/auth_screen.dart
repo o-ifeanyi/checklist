@@ -3,6 +3,7 @@ import 'package:checklist_app/core/platform_specific/platform_progress_indicator
 import 'package:checklist_app/core/util/config.dart';
 import 'package:checklist_app/model/user.dart';
 import 'package:checklist_app/provider/auth_provider.dart';
+import 'package:checklist_app/provider/checklist_provider.dart';
 import 'package:checklist_app/view/screen/home_screen.dart';
 import 'package:checklist_app/view/widget/auth_button.dart';
 import 'package:flutter/material.dart';
@@ -97,12 +98,13 @@ class _AuthScreenState extends State<AuthScreen> {
                 },
               ),
               SizedBox(height: Config.yMargin(context, 1)),
-              Consumer<AuthProvider>(
-                builder: (context, provider, child) {
+              Consumer2<AuthProvider, ChecklistProvider>(
+                builder: (context, auth, check, child) {
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: provider.authState == AuthState.register ||
-                            provider.authState == AuthState.login
+                    child: auth.authState == AuthState.register ||
+                            auth.authState == AuthState.login ||
+                            check.checkState == CheckState.sync
                         ? const PlatformProgressIndicator()
                         : AuthButton(
                             hPadding: 0,
@@ -117,10 +119,11 @@ class _AuthScreenState extends State<AuthScreen> {
                               );
                               bool success;
                               if (isRegister)
-                                success = await provider.register(user);
+                                success = await auth.register(user);
                               else
-                                success = await provider.login(user);
+                                success = await auth.login(user);
                               if (success) {
+                                await check.sync();
                                 context.go(HomeScreen.route);
                               }
                             },
