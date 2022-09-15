@@ -30,6 +30,7 @@ Future<Response<dynamic>> getFixture() {
 Future<Response<dynamic>> deleteFixture() {
   return _helper.delete(
     path: any(named: 'path'),
+    data: any(named: 'data'),
     statusCode: any(named: 'statusCode'),
   );
 }

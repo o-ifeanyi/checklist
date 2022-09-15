@@ -30,7 +30,7 @@ func TestFindById(t *testing.T) {
 		as := AuthService{ms}
 
 		_, err := as.FindById(user.Id)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -54,7 +54,7 @@ func TestFindByEmail(t *testing.T) {
 		as := AuthService{ms}
 
 		_, err := as.FindByEmail(user.Email)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -82,7 +82,7 @@ func TestCreate(t *testing.T) {
 
 		token, err := as.Create("email", "123456")
 		assert.Empty(t, token)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -110,7 +110,7 @@ func TestLogin(t *testing.T) {
 
 		token, err := as.Login("email", "123456")
 		assert.Empty(t, token)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -136,6 +136,6 @@ func TestLogout(t *testing.T) {
 		as := AuthService{ms}
 
 		err := as.Logout("id")
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }

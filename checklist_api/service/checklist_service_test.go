@@ -30,7 +30,7 @@ func TestSync(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		_, err := cs.Sync("userid", checklists)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -54,7 +54,7 @@ func TestGetAll(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		_, err := cs.GetAll("userid")
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -78,7 +78,7 @@ func TestCreatee(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Create(checklist)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -102,7 +102,7 @@ func TestUpdate(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Update(checklist)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }
 
@@ -126,6 +126,6 @@ func TestDelete(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Delete(checklist.Id)
-		assert.ErrorContains(t, err, "failed")
+		assert.NotEmpty(t, err)
 	})
 }

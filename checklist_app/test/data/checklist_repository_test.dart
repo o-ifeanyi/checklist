@@ -49,7 +49,7 @@ void main() {
         (_) => Future.value(Response(
           statusCode: 200,
           requestOptions: RequestOptions(path: 'path'),
-          data: [],
+          data: {'data': []},
         )),
       );
       when(() => hiveService.allSyncLater()).thenAnswer(
