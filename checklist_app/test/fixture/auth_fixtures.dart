@@ -34,8 +34,5 @@ Future<Response<dynamic>> deleteFixture() {
   );
 }
 
-JsonMap get sessionDataFixture =>
-    {'email': 'ifeanyi@gmail.com', 'password': '123456'};
-
 UserModel get userModelFixture =>
     UserModel(email: 'ifeanyi@gmail.com', password: '123456');
