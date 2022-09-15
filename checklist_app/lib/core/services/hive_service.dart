@@ -1,6 +1,8 @@
+import 'package:checklist_app/core/constants/constants.dart';
 import 'package:checklist_app/core/util/themes.dart';
 import 'package:checklist_app/model/checklist.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
   final Box appDataBox;
@@ -40,8 +42,8 @@ class HiveService {
     return;
   }
 
-  Future<void> delete(String id) async {
-    return checklistBox.delete(id);
+  Future<void> deleteAll(Iterable<String> ids) async {
+    return checklistBox.deleteAll(ids);
   }
 
   Future<void> syncLater(ChecklistModel checklist) async {
