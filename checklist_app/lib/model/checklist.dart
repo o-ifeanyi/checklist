@@ -21,6 +21,12 @@ class ChecklistModel {
     required this.items,
   });
 
+  @override
+  bool operator ==(Object other) {
+    if (other is! ChecklistModel) return false;
+    return this.id == other.id;
+  }
+
   List<ChecklistItemModel> get undone =>
       this.items.where((item) => !item.done).toList();
 
@@ -31,6 +37,9 @@ class ChecklistModel {
     final maxi = Config.yMargin(context, 30);
     final double e;
     switch (undone.length) {
+      case 0:
+        e = 0.6;
+        break;
       case 1:
         e = 1;
         break;
@@ -40,11 +49,8 @@ class ChecklistModel {
       case 3:
         e = 1.8;
         break;
-      case 4:
-        e = 2.2;
-        break;
       default:
-        e = 0.6;
+        e = 2.2;
     }
     final extent = e * Config.textSize(context, 12);
     return min(maxi, extent);
