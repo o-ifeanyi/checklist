@@ -59,7 +59,7 @@ void main() {
         (_) => Future.value(),
       );
 
-      final result = await checklistRepositoryImpl.sync([]);
+      final result = await checklistRepositoryImpl.sync();
 
       expect(result.isRight(), equals(true));
     });
@@ -142,7 +142,7 @@ void main() {
   group('Checklist repository - Delete', () {
     test('Should return true when successful', () async {
       when(() => mockNetworkService.hasConnection).thenReturn(true);
-      when(() => hiveService.delete(any())).thenAnswer(
+      when(() => hiveService.deleteAll(any())).thenAnswer(
         (_) => Future.value(),
       );
       when(() => deleteFixture()).thenAnswer(
@@ -151,11 +151,11 @@ void main() {
       );
 
       final result =
-          await checklistRepositoryImpl.delete(checkListModelFixture);
+          await checklistRepositoryImpl.delete([checkListModelFixture]);
       expect(result, const Right(true));
     });
     test('Should return CustomException when it fails', () async {
-      when(() => hiveService.delete(any())).thenAnswer(
+      when(() => hiveService.deleteAll(any())).thenAnswer(
         (_) => Future.value(),
       );
       when(() => hiveService.syncLater(any())).thenAnswer(
@@ -165,7 +165,7 @@ void main() {
       when(() => deleteFixture()).thenThrow(customException);
 
       final result =
-          await checklistRepositoryImpl.delete(checkListModelFixture);
+          await checklistRepositoryImpl.delete([checkListModelFixture]);
 
       expect(result, Left(customException));
     });
