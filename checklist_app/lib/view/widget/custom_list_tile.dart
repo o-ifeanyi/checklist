@@ -22,10 +22,10 @@ class CustomListTile extends StatelessWidget {
       onTap: onPressed,
       contentPadding: const EdgeInsets.all(0),
       leading: Container(
-        padding: const EdgeInsets.all(6),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: theme.backgroundColor,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(5),
         ),
         child: Icon(iconData, size: 20),
       ),
