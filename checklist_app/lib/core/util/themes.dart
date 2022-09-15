@@ -57,6 +57,11 @@ final lightTheme = ThemeData(
     brightness: Brightness.light,
   ),
   dividerColor: const Color(0xFFDFDFDF),
+  checkboxTheme: CheckboxThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+  ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
@@ -84,6 +89,11 @@ final darkTheme = ThemeData(
   colorScheme: ColorScheme.fromSwatch(primarySwatch: darkPriSwatch).copyWith(
     secondary: const Color(0xFF545454),
     brightness: Brightness.dark,
+  ),
+  checkboxTheme: CheckboxThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
   ),
   dividerColor: const Color(0xFF7A7A7A),
   inputDecorationTheme: InputDecorationTheme(
