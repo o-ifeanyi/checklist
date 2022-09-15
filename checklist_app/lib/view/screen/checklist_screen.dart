@@ -44,7 +44,6 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
           provider.update(checklist);
         else
           provider.create(checklist);
-
         return Future.value(true);
       },
       child: Scaffold(
@@ -61,7 +60,10 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                 ),
-                onChanged: (val) {},
+                onChanged: (val) {
+                  checklist = checklist.copyWith(title: val);
+                  setState(() {});
+                },
               ),
               ...checklist.undone
                   .map(
@@ -84,10 +86,14 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                             icon: Icon(AppIcons.clear, size: 20),
                           ),
                         ),
-                        onChanged: (val) {},
-                      ),
-                      checkboxShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+                        onChanged: (val) {
+                          final items = checklist.items;
+                          final index = items.indexOf(e);
+                          items.replaceRange(index, index + 1,
+                              [ChecklistItemModel(text: val, done: e.done)]);
+                          checklist = checklist.copyWith(items: items);
+                          setState(() {});
+                        },
                       ),
                       value: e.done,
                       onChanged: (val) {
