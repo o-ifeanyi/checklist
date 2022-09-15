@@ -48,20 +48,20 @@ void main() {
   group('Auth Provider - Sync', () {
     test('Should return a true when successful', () async {
       when(
-        () => mockChecklistRepository.sync(any()),
+        () => mockChecklistRepository.sync(),
       ).thenAnswer((_) => Future.value(const Right([])));
 
-      final result = await checklistProvider.sync([]);
+      final result = await checklistProvider.sync();
 
       expect(result, equals(true));
     });
     test('Should return a false when un-successful', () async {
       when(
-        () => mockChecklistRepository.sync(any()),
+        () => mockChecklistRepository.sync(),
       ).thenAnswer(
           (_) => Future.value(Left(CustomException(message: 'sync failed'))));
 
-      final result = await checklistProvider.sync([]);
+      final result = await checklistProvider.sync();
 
       expect(result, equals(false));
     });
@@ -117,7 +117,7 @@ void main() {
         () => mockChecklistRepository.delete(any()),
       ).thenAnswer((_) => Future.value(const Right(true)));
 
-      final result = await checklistProvider.delete(checkListModelFixture);
+      final result = await checklistProvider.delete([checkListModelFixture]);
 
       expect(result, equals(true));
     });
@@ -127,7 +127,7 @@ void main() {
       ).thenAnswer(
           (_) => Future.value(Left(CustomException(message: 'sync failed'))));
 
-      final result = await checklistProvider.delete(checkListModelFixture);
+      final result = await checklistProvider.delete([checkListModelFixture]);
 
       expect(result, equals(false));
     });
