@@ -95,11 +95,19 @@ func (ch ChecklistHandler) HandleUpdate(c *gin.Context) {
 }
 
 func (ch ChecklistHandler) HandleDelete(c *gin.Context) {
-	id := c.Param("id")
-	err := ch.CI.Delete(id)
+	param := syncReqParam{}
+	err := c.ShouldBindJSON(&param)
 	if err != nil {
-		util.InternalServerError(c, err)
+		util.InternalServerError(c, errors.New("error decoding form"))
 		return
+	}
+
+	for _, cl := range param.Data {
+		err := ch.CI.Delete(cl.Id)
+		if err != nil {
+			util.InternalServerError(c, err)
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, model.Response{

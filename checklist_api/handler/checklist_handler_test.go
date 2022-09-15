@@ -153,18 +153,21 @@ func TestHandleUpdate(t *testing.T) {
 
 func TestHandleDelete(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	param := "checklistId"
+	param := syncReqParam{
+		Data: []model.Checklist{{Id: "id"}},
+	}
+	reqValue, _ := json.Marshal(param)
 
 	t.Run("expect 200 on success", func(t *testing.T) {
 		cs := new(mock.ChecklistService)
 		ch := NewChecklistHandler(cs)
 
 		router := gin.Default()
-		router.DELETE("user/delete/:id", ch.HandleDelete)
+		router.DELETE("user/delete", ch.HandleDelete)
 
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("DELETE", "/user/delete/"+param, nil)
-		cs.On("Delete", param).Return(nil)
+		req, _ := http.NewRequest("DELETE", "/user/delete", bytes.NewBuffer(reqValue))
+		cs.On("Delete", "id").Return(nil)
 		router.ServeHTTP(w, req)
 		exp := model.Response{
 			Status:  http.StatusOK,
@@ -180,10 +183,10 @@ func TestHandleDelete(t *testing.T) {
 		ch := NewChecklistHandler(cs)
 
 		router := gin.Default()
-		router.DELETE("user/delete/:id", ch.HandleDelete)
+		router.DELETE("user/delete", ch.HandleDelete)
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("DELETE", "/user/delete/"+param, nil)
-		cs.On("Delete", param).Return(errors.New("failed"))
+		req, _ := http.NewRequest("DELETE", "/user/delete", bytes.NewBuffer(reqValue))
+		cs.On("Delete", "id").Return(errors.New("failed"))
 		router.ServeHTTP(w, req)
 		exp := model.Response{
 			Status:  http.StatusInternalServerError,

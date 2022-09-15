@@ -27,7 +27,7 @@ func main() {
 	user.POST("/sync", ch.HandleSync)
 	user.POST("/create", ch.HandleCreate)
 	user.POST("/update", ch.HandleUpdate)
-	user.DELETE("/delete/:id", ch.HandleDelete)
+	user.DELETE("/delete", ch.HandleDelete)
 
 	router.Run(":8080")
 }
