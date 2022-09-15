@@ -81,7 +81,8 @@ class NetworkService {
       rethrow;
     } on DioError catch (error) {
       debugPrint('${error.response}');
-      throw CustomException(message: '${error.response?.data['message']}');
+      throw CustomException(
+          message: '${error.response?.data['message'] ?? 'sync failure'}');
     } catch (error) {
       debugPrint('$error');
       throw CustomException(message: '$error');
@@ -90,7 +91,7 @@ class NetworkService {
 
   Future<Response> delete({
     required String path,
-    JsonMap? query,
+    JsonMap? data,
     int statusCode = 200,
   }) async {
     try {
@@ -100,7 +101,7 @@ class NetworkService {
           method: 'DELETE',
           headers: {'Authorization': hiveService.getToken()},
         ),
-        queryParameters: query,
+        data: json.encode(data),
       );
       if (response.statusCode == statusCode) {
         return response;
@@ -111,7 +112,8 @@ class NetworkService {
       rethrow;
     } on DioError catch (error) {
       debugPrint('${error.response}');
-      throw CustomException(message: '${error.response?.data['message']}');
+      throw CustomException(
+          message: '${error.response?.data['message'] ?? 'sync failure'}');
     } catch (error) {
       debugPrint('$error');
       throw CustomException(message: '$error');

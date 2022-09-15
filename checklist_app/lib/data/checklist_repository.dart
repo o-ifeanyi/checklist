@@ -4,6 +4,7 @@ import 'package:checklist_app/interface/checklist_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:checklist_app/model/exception.dart';
 import 'package:checklist_app/model/checklist.dart';
+import 'package:flutter/foundation.dart';
 
 class ChecklistRepositoryImpl implements ChecklistRepository {
   final NetworkService networkService;
@@ -47,36 +48,47 @@ class ChecklistRepositoryImpl implements ChecklistRepository {
   }
 
   @override
-  Future<Either<CustomException, bool>> delete(ChecklistModel checklist) async {
+  Future<Either<CustomException, bool>> delete(
+      List<ChecklistModel> checklists) async {
     try {
-      await hiveService.delete(checklist.id);
+      await hiveService.deleteAll(checklists.map((e) => e.id));
 
       if (networkService.hasConnection) {
-        await networkService.delete(path: 'user/delete/${checklist.id}');
+        await networkService.delete(
+          path: 'user/delete',
+          data: {'data': checklists.map((e) => e.toMap()).toList()},
+        );
       } else {
-        checklist = checklist.copyWith(action: SyncAction.delete);
-        await hiveService.syncLater(checklist);
+        checklists = checklists
+            .map((e) => e.copyWith(action: SyncAction.delete))
+            .toList();
+        checklists.forEach((element) async {
+          await hiveService.syncLater(element);
+        });
       }
       return const Right(true);
     } on CustomException catch (e) {
-      checklist = checklist.copyWith(action: SyncAction.delete);
-      await hiveService.syncLater(checklist);
+      checklists =
+          checklists.map((e) => e.copyWith(action: SyncAction.delete)).toList();
+      checklists.forEach((element) async {
+        await hiveService.syncLater(element);
+      });
       return Left(e);
     }
   }
 
   @override
-  Future<Either<CustomException, List<ChecklistModel>>> sync(
-      List<ChecklistModel> checklist) async {
+  Future<Either<CustomException, List<ChecklistModel>>> sync() async {
     try {
       final data = await hiveService.allSyncLater();
+      debugPrint('SYNC CALLED WITH ${data.length} ITEMS');
 
       final response = await networkService.post(
         path: 'user/sync',
-        data: {'data': data.map((e) => e.toMap())},
+        data: {'data': data.map((e) => e.toMap()).toList()},
       );
 
-      final synched = (response.data as List)
+      final synched = (response.data['data'] as List)
           .map((e) => ChecklistModel.fromJson(e))
           .toList();
 

@@ -4,9 +4,8 @@ import 'package:dartz/dartz.dart';
 
 abstract class ChecklistRepository {
   Future<Either<CustomException, List<ChecklistModel>>> all();
-  Future<Either<CustomException, List<ChecklistModel>>> sync(
-      List<ChecklistModel> checklist);
+  Future<Either<CustomException, List<ChecklistModel>>> sync();
   Future<Either<CustomException, bool>> create(ChecklistModel checklist);
   Future<Either<CustomException, bool>> update(ChecklistModel checklist);
-  Future<Either<CustomException, bool>> delete(ChecklistModel checklist);
+  Future<Either<CustomException, bool>> delete(List<ChecklistModel> checklists);
 }

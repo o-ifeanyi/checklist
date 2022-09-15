@@ -20,6 +20,26 @@ class ChecklistProvider extends ChangeNotifier {
 
   List<ChecklistModel> allChecklist = [];
 
+  List<ChecklistModel> _marked = [];
+  List<ChecklistModel> get marked => _marked;
+
+  void markAll(bool val) {
+    _marked.clear();
+    if (val) {
+      _marked.addAll(allChecklist);
+    }
+    notifyListeners();
+  }
+
+  void updateMarked(ChecklistModel checklist) {
+    if (_marked.contains(checklist)) {
+      _marked.remove(checklist);
+    } else {
+      _marked.add(checklist);
+    }
+    notifyListeners();
+  }
+
   Future<bool> getAll() async {
     final allEither = await checklistRepository.all();
     return allEither.fold(
@@ -35,9 +55,9 @@ class ChecklistProvider extends ChangeNotifier {
     );
   }
 
-  Future<bool> sync(List<ChecklistModel> checklists) async {
+  Future<bool> sync() async {
     setState(CheckState.sync);
-    final syncEither = await checklistRepository.sync(checklists);
+    final syncEither = await checklistRepository.sync();
     setState(CheckState.idle);
     return syncEither.fold(
       (exc) {
@@ -74,7 +94,7 @@ class ChecklistProvider extends ChangeNotifier {
     );
   }
 
-  Future<bool> delete(ChecklistModel checklist) async {
+  Future<bool> delete(List<ChecklistModel> checklist) async {
     final deleteEither = await checklistRepository.delete(checklist);
     return deleteEither.fold(
       (exc) {
