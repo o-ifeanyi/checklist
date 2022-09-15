@@ -61,7 +61,7 @@ func (as AuthService) Create(email, password string) (string, error) {
 	token, tokenErr := util.GenerateToken(user.Id)
 	if tokenErr != nil {
 		log.Println(tokenErr)
-		return "", tokenErr
+		return "", errors.New("generate user token failed")
 	}
 
 	user.Email = email
@@ -71,7 +71,7 @@ func (as AuthService) Create(email, password string) (string, error) {
 	insertErr := as.DB.Insert("users", user)
 	if insertErr != nil {
 		log.Println(insertErr)
-		return "", insertErr
+		return "", errors.New("insert user failed")
 	}
 
 	return token, nil
@@ -101,7 +101,7 @@ func (as AuthService) Login(email, password string) (string, error) {
 	updateErr := as.DB.Update("users", bson.M{"email": user.Email}, user)
 	if updateErr != nil {
 		log.Println(updateErr)
-		return "", updateErr
+		return "", errors.New("update user failed")
 	}
 
 	return token, nil
@@ -118,7 +118,7 @@ func (as AuthService) Logout(userId string) error {
 	updateErr := as.DB.Update("users", bson.M{"id": user.Id}, user)
 	if updateErr != nil {
 		log.Println(updateErr)
-		return updateErr
+		return errors.New("update user failed")
 	}
 	return nil
 }
