@@ -75,7 +75,7 @@ class ChecklistModel {
     return ChecklistModel(
       id: json['id'],
       title: json['title'],
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(json['updatedAt']),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(json['updated_at']),
       action: SyncAction.values.firstWhere(
         (action) => action.name == json['action'],
         orElse: () => SyncAction.synched,
@@ -90,7 +90,7 @@ class ChecklistModel {
     return {
       'id': id,
       'title': title,
-      'updatedAt': updatedAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt.millisecondsSinceEpoch,
       'action': action.name,
       'items': items.map((e) => e.toMap()).toList(),
     };
