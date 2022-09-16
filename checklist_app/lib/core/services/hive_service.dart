@@ -1,4 +1,3 @@
-import 'package:checklist_app/core/constants/constants.dart';
 import 'package:checklist_app/core/util/themes.dart';
 import 'package:checklist_app/model/checklist.dart';
 import 'package:hive/hive.dart';
@@ -37,6 +36,7 @@ class HiveService {
     for (var checklist in checklists) {
       data[checklist.id] = checklist.toMap();
     }
+    await checklistBox.clear();
     await checklistBox.putAll(data);
     if (clearSync) await syncBox.clear();
     return;
