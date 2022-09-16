@@ -48,7 +48,7 @@ class ChecklistItem extends StatelessWidget {
             Text(
               checklist.title,
               overflow: TextOverflow.ellipsis,
-              style: Config.h2(context),
+              style: Config.h3b(context),
             ),
             SizedBox(height: Config.yMargin(context, 1)),
             ...checklist.undone
