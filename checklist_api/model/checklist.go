@@ -1,16 +1,16 @@
 package model
 
 type Checklist struct {
-	Id        string          `json:"id,omitempty"`
-	UserId    string          `json:"userId,omitempty"`
-	Title     string          `json:"title,omitempty"`
-	UpdatedAt int             `json:"updatedAt,omitempty"`
-	Action    string          `json:"action,omitempty"`
-	Items     []ChecklistItem `json:"items,omitempty"`
+	Id        string          `json:"id"`
+	UserId    string          `json:"userid"`
+	Title     string          `json:"title"`
+	UpdatedAt int             `json:"updated_at"`
+	Action    string          `json:"action"`
+	Items     []ChecklistItem `json:"items"`
 }
 
 type ChecklistItem struct {
-	Id string	`json:"id,omitempty"`
-	Text string `json:"text,omitempty"`
-	Done bool   `json:"done,omitempty"`
+	Id   string `json:"id"`
+	Text string `json:"text"`
+	Done bool   `json:"done"`
 }
