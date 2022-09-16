@@ -10,6 +10,7 @@ type Checklist struct {
 }
 
 type ChecklistItem struct {
+	Id string	`json:"id,omitempty"`
 	Text string `json:"text,omitempty"`
 	Done bool   `json:"done,omitempty"`
 }
