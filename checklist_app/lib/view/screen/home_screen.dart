@@ -66,6 +66,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: SafeArea(
         child: Column(
           children: [
+            _provider.checkState == CheckState.idle
+                ? const SizedBox(height: 2)
+                : const LinearProgressIndicator(minHeight: 2),
             Container(
               height: Config.yMargin(context, 11),
               padding: Config.contentPadding(context),
@@ -142,18 +145,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     ),
             ),
             Expanded(
-              child: MasonryGridView.builder(
-                padding: Config.contentPadding(context),
-                itemCount: checklists.length,
-                gridDelegate: SliverSimpleGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: Config.xMargin(context, 50),
-                ),
-                crossAxisSpacing: Config.xMargin(context, 3),
-                mainAxisSpacing: Config.yMargin(context, 2),
-                itemBuilder: (context, index) {
-                  final checklist = checklists[index];
-                  return ChecklistItem(checklist: checklist);
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await _provider.sync();
+                  return;
                 },
+                child: MasonryGridView.builder(
+                  padding: Config.contentPadding(context),
+                  itemCount: checklists.length,
+                  gridDelegate: SliverSimpleGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: Config.xMargin(context, 50),
+                  ),
+                  crossAxisSpacing: Config.xMargin(context, 3),
+                  mainAxisSpacing: Config.yMargin(context, 2),
+                  itemBuilder: (context, index) {
+                    final checklist = checklists[index];
+                    return ChecklistItem(checklist: checklist);
+                  },
+                ),
               ),
             ),
           ],
