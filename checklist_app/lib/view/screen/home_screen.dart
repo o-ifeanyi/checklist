@@ -1,6 +1,8 @@
 import 'package:checklist_app/core/constants/constants.dart';
 import 'package:checklist_app/core/platform_specific/platform_icons.dart';
 import 'package:checklist_app/core/util/config.dart';
+import 'package:checklist_app/core/util/debouncer.dart';
+import 'package:checklist_app/model/checklist.dart';
 import 'package:checklist_app/provider/checklist_provider.dart';
 import 'package:checklist_app/view/screen/checklist_screen.dart';
 import 'package:checklist_app/view/screen/profile_screen.dart';
@@ -23,7 +25,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late ChecklistProvider _provider;
   late ValueListenable<Box<dynamic>> _checklistBox;
+  List<ChecklistModel> checklists = [];
   bool _markAll = false;
+  final _debouncer = Debouncer();
 
   @override
   void initState() {
@@ -32,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _checklistBox = Hive.box(kHiveBoxes.checklist.name).listenable();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _provider.getAll();
+      _provider.getAll().then((_) => checklists = _provider.allChecklist);
       _checklistBox.addListener(() {
-        _provider.getAll();
+        _provider.getAll().then((_) => checklists = _provider.allChecklist);
       });
     });
   }
@@ -57,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final _provider = context.watch<ChecklistProvider>();
-    final checklists = _provider.allChecklist;
+    final _checklists = _provider.allChecklist;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -106,13 +110,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             keyboardType: TextInputType.emailAddress,
                             style: Config.b1(context),
                             decoration: InputDecoration(
-                              labelText: 'Search',
+                              hintText: 'Search',
                               prefixIcon: Icon(AppIcons.search),
                               errorStyle: Config.b2(context),
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                             ),
-                            onChanged: (val) {},
+                            onChanged: (val) {
+                              _debouncer(() {
+                                setState(() {
+                                  checklists = _checklists
+                                      .where((checklist) =>
+                                          checklist.title.contains(val) ||
+                                          checklist.items.any((item) =>
+                                              item.text.contains(val)))
+                                      .toList();
+                                });
+                              });
+                            },
                           ),
                         ),
                         const SizedBox(width: 20),
