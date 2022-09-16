@@ -3,7 +3,7 @@ import 'package:checklist_app/interface/checklist_repository.dart';
 import 'package:checklist_app/model/checklist.dart';
 import 'package:flutter/material.dart';
 
-enum CheckState { idle, sync }
+enum CheckState { idle, sync, getAll, create, update, delete }
 
 class ChecklistProvider extends ChangeNotifier {
   final ChecklistRepository checklistRepository;
@@ -41,7 +41,9 @@ class ChecklistProvider extends ChangeNotifier {
   }
 
   Future<bool> getAll() async {
+    setState(CheckState.getAll);
     final allEither = await checklistRepository.all();
+    setState(CheckState.idle);
     return allEither.fold(
       (exc) {
         snackBarService.displayMessage(exc.message);
@@ -73,7 +75,9 @@ class ChecklistProvider extends ChangeNotifier {
   }
 
   Future<bool> create(ChecklistModel checklist) async {
+    setState(CheckState.create);
     final createEither = await checklistRepository.create(checklist);
+    setState(CheckState.idle);
     return createEither.fold(
       (exc) {
         snackBarService.displayMessage(exc.message);
@@ -84,7 +88,9 @@ class ChecklistProvider extends ChangeNotifier {
   }
 
   Future<bool> update(ChecklistModel checklist) async {
+    setState(CheckState.update);
     final updateEither = await checklistRepository.update(checklist);
+    setState(CheckState.idle);
     return updateEither.fold(
       (exc) {
         snackBarService.displayMessage(exc.message);
@@ -95,7 +101,9 @@ class ChecklistProvider extends ChangeNotifier {
   }
 
   Future<bool> delete(List<ChecklistModel> checklist) async {
+    setState(CheckState.delete);
     final deleteEither = await checklistRepository.delete(checklist);
+    setState(CheckState.idle);
     return deleteEither.fold(
       (exc) {
         snackBarService.displayMessage(exc.message);
