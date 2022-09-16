@@ -98,20 +98,38 @@ class ChecklistModel {
 }
 
 class ChecklistItemModel {
+  final String id;
   final String text;
   final bool done;
 
-  ChecklistItemModel({required this.text, required this.done});
+  ChecklistItemModel(
+      {required this.id, required this.text, required this.done});
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! ChecklistItemModel) return false;
+    return this.id == other.id;
+  }
 
   factory ChecklistItemModel.fromJson(Map json) {
     return ChecklistItemModel(
+      id: json['id'],
       text: json['text'],
       done: json['done'],
     );
   }
 
+  ChecklistItemModel copyWith({String? text, bool? done}) {
+    return ChecklistItemModel(
+      id: id,
+      text: text ?? this.text,
+      done: done ?? this.done,
+    );
+  }
+
   JsonMap toMap() {
     return {
+      'id': id,
       'text': text,
       'done': done,
     };

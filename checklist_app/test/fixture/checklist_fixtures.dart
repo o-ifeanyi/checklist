@@ -10,6 +10,7 @@ JsonMap get checkListDataFixture => {
     };
 
 JsonMap get checkListItemDataFixture => {
+      'id': 'id',
       'text': 'text',
       'done': true,
     };
@@ -23,6 +24,7 @@ ChecklistModel get checkListModelFixture => ChecklistModel(
     );
 
 ChecklistItemModel get checkListItemModelFixture => ChecklistItemModel(
+      id: 'id',
       text: 'text',
       done: true,
     );

@@ -17,6 +17,7 @@ class ChecklistScreen extends StatefulWidget {
 }
 
 class _ChecklistScreenState extends State<ChecklistScreen> {
+  final _formKey = GlobalKey<FormState>();
   late ChecklistModel checklist;
   late bool isUpdate;
   @override
@@ -30,7 +31,9 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
         id: const Uuid().v4(),
         title: 'title',
         updatedAt: DateTime.now(),
-        items: [ChecklistItemModel(text: '', done: false)],
+        items: [
+          ChecklistItemModel(id: const Uuid().v4(), text: '', done: false)
+        ],
       );
     }
   }
@@ -50,112 +53,113 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
         appBar: AppBar(),
         body: SingleChildScrollView(
           padding: Config.contentPadding(context),
-          child: Column(
-            children: [
-              TextFormField(
-                initialValue: checklist.title,
-                style: Config.h2(context),
-                decoration: InputDecoration(
-                  errorStyle: Config.b2(context),
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  initialValue: checklist.title,
+                  style: Config.h2(context),
+                  decoration: InputDecoration(
+                    errorStyle: Config.b2(context),
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                  ),
+                  onChanged: (val) {
+                    checklist = checklist.copyWith(title: val);
+                  },
                 ),
-                onChanged: (val) {
-                  checklist = checklist.copyWith(title: val);
-                  setState(() {});
-                },
-              ),
-              ...checklist.undone
-                  .map(
-                    (e) => CheckboxListTile(
-                      key: ValueKey(e.hashCode),
-                      contentPadding: const EdgeInsets.all(0),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: TextFormField(
-                        initialValue: e.text,
-                        style: Config.b1(context),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              final items = checklist.items..remove(e);
-                              checklist = checklist.copyWith(items: items);
-                              setState(() {});
-                            },
-                            icon: Icon(AppIcons.clear, size: 20),
-                          ),
-                        ),
-                        onChanged: (val) {
-                          final items = checklist.items;
-                          final index = items.indexOf(e);
-                          items.replaceRange(index, index + 1,
-                              [ChecklistItemModel(text: val, done: e.done)]);
-                          checklist = checklist.copyWith(items: items);
-                          setState(() {});
-                        },
-                      ),
-                      value: e.done,
-                      onChanged: (val) {
-                        if (val == null) return;
-                        final items = checklist.items;
-                        final index = items.indexOf(e);
-                        items.replaceRange(index, index + 1,
-                            [ChecklistItemModel(text: e.text, done: val)]);
-                        checklist = checklist.copyWith(items: items);
-                        setState(() {});
-                      },
-                    ),
-                  )
-                  .toList(),
-              ListTile(
-                onTap: () {
-                  final items = checklist.items;
-                  items.add(ChecklistItemModel(text: '', done: false));
-                  checklist = checklist.copyWith(items: items);
-                  setState(() {});
-                },
-                leading: Icon(AppIcons.add),
-                title: Text(
-                  'Add item',
-                  style: Config.b1(context),
-                ),
-              ),
-              if (checklist.done.isNotEmpty) ...[
-                const Divider(thickness: 1),
-                ...checklist.done
+                ...checklist.undone
                     .map(
                       (e) => CheckboxListTile(
                         key: ValueKey(e.hashCode),
-                        activeColor: Theme.of(context).backgroundColor,
                         contentPadding: const EdgeInsets.all(0),
                         controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(
-                          e.text,
-                          style: Config.b1(context).copyWith(
-                            decoration: TextDecoration.lineThrough,
+                        title: TextFormField(
+                          initialValue: e.text,
+                          style: Config.b1(context),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                final items = checklist.items..remove(e);
+                                checklist = checklist.copyWith(items: items);
+                                setState(() {});
+                              },
+                              icon: Icon(AppIcons.clear, size: 20),
+                            ),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        checkboxShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          onChanged: (val) {
+                            final items = checklist.items;
+                            final index = items.indexOf(e);
+                            items.replaceRange(
+                                index, index + 1, [e.copyWith(text: val)]);
+                            checklist = checklist.copyWith(items: items);
+                          },
                         ),
                         value: e.done,
                         onChanged: (val) {
                           if (val == null) return;
                           final items = checklist.items;
                           final index = items.indexOf(e);
-                          items.remove(e);
-                          items.insert(index,
-                              ChecklistItemModel(text: e.text, done: val));
+                          items.replaceRange(
+                              index, index + 1, [e.copyWith(done: val)]);
                           checklist = checklist.copyWith(items: items);
                           setState(() {});
                         },
                       ),
                     )
                     .toList(),
+                ListTile(
+                  onTap: () {
+                    final items = checklist.items;
+                    items.add(ChecklistItemModel(
+                        id: const Uuid().v4(), text: '', done: false));
+                    checklist = checklist.copyWith(items: items);
+                    setState(() {});
+                  },
+                  leading: Icon(AppIcons.add),
+                  title: Text(
+                    'Add item',
+                    style: Config.b1(context),
+                  ),
+                ),
+                if (checklist.done.isNotEmpty) ...[
+                  const Divider(thickness: 1),
+                  ...checklist.done
+                      .map(
+                        (e) => CheckboxListTile(
+                          key: ValueKey(e.hashCode),
+                          activeColor: Theme.of(context).backgroundColor,
+                          contentPadding: const EdgeInsets.all(0),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(
+                            e.text,
+                            style: Config.b1(context).copyWith(
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          checkboxShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          value: e.done,
+                          onChanged: (val) {
+                            if (val == null) return;
+                            final items = checklist.items;
+                            final index = items.indexOf(e);
+                            items.remove(e);
+                            items.insert(index, e.copyWith(done: val));
+                            checklist = checklist.copyWith(items: items);
+                            setState(() {});
+                          },
+                        ),
+                      )
+                      .toList(),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
