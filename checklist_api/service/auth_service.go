@@ -44,7 +44,7 @@ func (as AuthService) FindByEmail(email string) (model.User, error) {
 
 func (as AuthService) Create(email, password string) (string, error) {
 
-	user, err := as.DB.FindUser(bson.M{"email": email})
+	user, err := as.FindByEmail(email)
 
 	if err == nil && user.Email != "" {
 		log.Println(err)
