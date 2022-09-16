@@ -4,7 +4,7 @@ import 'package:checklist_app/model/checklist.dart';
 JsonMap get checkListDataFixture => {
       'id': 'id',
       'title': 'title',
-      'updatedAt': 1640991600000,
+      'updated_at': 1640991600000,
       'action': 'synched',
       'items': [checkListItemDataFixture],
     };
