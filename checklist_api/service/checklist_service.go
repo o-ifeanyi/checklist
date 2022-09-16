@@ -40,7 +40,7 @@ func (cs ChecklistService) Sync(userId string, checklists []model.Checklist) ([]
 func (cs ChecklistService) GetAll(userId string) ([]model.Checklist, error) {
 	var items []model.Checklist
 
-	items, err := cs.DB.AllChecklist(bson.M{"userId": userId})
+	items, err := cs.DB.AllChecklist(bson.M{"userid": userId})
 	if err != nil {
 		log.Println(err)
 		return items, errors.New("items not found")
