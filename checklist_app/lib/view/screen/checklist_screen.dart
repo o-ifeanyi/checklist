@@ -78,6 +78,8 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                         title: TextFormField(
                           initialValue: e.text,
                           style: Config.b1(context),
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -134,15 +136,19 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                           activeColor: Theme.of(context).backgroundColor,
                           contentPadding: const EdgeInsets.all(0),
                           controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(
-                            e.text,
+                          title: TextFormField(
+                            readOnly: true,
+                            initialValue: e.text,
                             style: Config.b1(context).copyWith(
                               decoration: TextDecoration.lineThrough,
                             ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          checkboxShape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                            ),
+                            onChanged: (_) {},
                           ),
                           value: e.done,
                           onChanged: (val) {
