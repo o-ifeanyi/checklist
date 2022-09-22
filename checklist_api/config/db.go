@@ -2,7 +2,9 @@ package config
 
 import (
 	"context"
+	"flag"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,10 +16,17 @@ var DB *mongo.Database
 
 var Ctx context.Context
 
+var env string
+
 func init() {
+	flag.StringVar(&env, "env", "local", "The application env variable")
+	flag.Parse()
+
+	LoadEnvFile(env)
+
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-	uri := "mongodb://testuser:dbpassword@localhost:27017/checklistdb"
+	uri := os.Getenv("MONGO_URI")
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
