@@ -33,3 +33,7 @@ func (m MongoService) Delete(col string, filter interface{}) error {
 	args := m.Called(col, filter)
 	return args.Error(0)
 }
+func (m MongoService) DeleteAll(col string, filter interface{}) error {
+	args := m.Called(col, filter)
+	return args.Error(0)
+}

@@ -62,3 +62,12 @@ func (ms MongoService) Delete(col string, filter interface{}) error {
 
 	return nil
 }
+
+func (ms MongoService) DeleteAll(col string, filter interface{}) error {
+	_, deleteErr := ms.DB.Collection(col).DeleteMany(context.Background(), filter)
+	if deleteErr != nil {
+		return deleteErr
+	}
+
+	return nil
+}

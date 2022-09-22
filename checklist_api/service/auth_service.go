@@ -122,3 +122,24 @@ func (as AuthService) Logout(userId string) error {
 	}
 	return nil
 }
+
+func (as AuthService) Delete(userId string) error {
+	user, err := as.FindById(userId)
+	if err != nil {
+		log.Println(err)
+		return errors.New("user not found")
+
+	}
+	deleteAllErr := as.DB.DeleteAll("checklist", bson.M{"userid": user.Id})
+	if deleteAllErr != nil {
+		log.Println(deleteAllErr)
+		return errors.New("delete all checklist failed")
+	}
+
+	deleteErr := as.DB.Delete("users", bson.M{"id": user.Id})
+	if deleteErr != nil {
+		log.Println(deleteErr)
+		return errors.New("delete user failed")
+	}
+	return nil
+}

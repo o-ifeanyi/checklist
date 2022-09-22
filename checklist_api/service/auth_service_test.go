@@ -117,7 +117,7 @@ func TestLogin(t *testing.T) {
 func TestLogout(t *testing.T) {
 	user := model.User{}
 
-	t.Run("return token on success", func(t *testing.T) {
+	t.Run("return nil on success", func(t *testing.T) {
 		ms := new(mock.MongoService)
 		ms.On("FindUser", m.Anything).Return(user, nil)
 		ms.On("Update", "users", m.Anything, m.Anything).Return(nil)
@@ -128,7 +128,7 @@ func TestLogout(t *testing.T) {
 		assert.ErrorIs(t, err, nil)
 	})
 
-	t.Run("return empty token and err on error", func(t *testing.T) {
+	t.Run("return err on error", func(t *testing.T) {
 		ms := new(mock.MongoService)
 		ms.On("FindUser", m.Anything).Return(user, errors.New("failed"))
 		ms.On("Update", "users", m.Anything, m.Anything).Return(errors.New("failed"))
@@ -136,6 +136,34 @@ func TestLogout(t *testing.T) {
 		as := AuthService{ms}
 
 		err := as.Logout("id")
+		assert.NotEmpty(t, err)
+	})
+}
+
+func TestDeleteUser(t *testing.T) {
+	user := model.User{}
+
+	t.Run("return nil on success", func(t *testing.T) {
+		ms := new(mock.MongoService)
+		ms.On("FindUser", m.Anything).Return(user, nil)
+		ms.On("Delete", "users", m.Anything, m.Anything).Return(nil)
+		ms.On("DeleteAll", "checklist", m.Anything, m.Anything).Return(nil)
+
+		as := AuthService{ms}
+
+		err := as.Delete("id")
+		assert.ErrorIs(t, err, nil)
+	})
+
+	t.Run("return err on error", func(t *testing.T) {
+		ms := new(mock.MongoService)
+		ms.On("FindUser", m.Anything).Return(user, errors.New("failed"))
+		ms.On("Delete", "users", m.Anything, m.Anything).Return(errors.New("failed"))
+		ms.On("DeleteAll", "checklist", m.Anything, m.Anything).Return(errors.New("failed"))
+
+		as := AuthService{ms}
+
+		err := as.Delete("id")
 		assert.NotEmpty(t, err)
 	})
 }

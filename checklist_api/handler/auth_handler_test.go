@@ -160,3 +160,50 @@ func TestHandleLogout(t *testing.T) {
 		assert.Equal(t, expJson, w.Body.Bytes())
 	})
 }
+
+func TestHandleAccountDelete(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	t.Run("expect 200 on success", func(t *testing.T) {
+		as := new(mock.AuthService)
+		as.On("Delete", "").Return(nil)
+		ah := NewAuthHandler(as)
+
+		router := gin.Default()
+		router.DELETE("user/account/delete", ah.HandleDelete)
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("DELETE", "/user/account/delete", nil)
+		router.ServeHTTP(w, req)
+
+		exp := model.Response{
+			Status:  http.StatusOK,
+			Message: "success",
+		}
+		expJson, _ := json.Marshal(exp)
+		assert.Equal(t, "", w.Header().Get("Token"))
+		assert.Equal(t, exp.Status, w.Code)
+		assert.Equal(t, expJson, w.Body.Bytes())
+	})
+
+	t.Run("expect 500 on error", func(t *testing.T) {
+		as := new(mock.AuthService)
+		as.On("Delete", "").Return(errors.New("failed"))
+		ah := NewAuthHandler(as)
+
+		router := gin.Default()
+		router.DELETE("user/account/delete", ah.HandleDelete)
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("DELETE", "/user/account/delete", nil)
+		router.ServeHTTP(w, req)
+
+		exp := model.Response{
+			Status:  http.StatusInternalServerError,
+			Message: "failed",
+		}
+		expJson, _ := json.Marshal(exp)
+		assert.Equal(t, exp.Status, w.Code)
+		assert.Equal(t, expJson, w.Body.Bytes())
+	})
+}

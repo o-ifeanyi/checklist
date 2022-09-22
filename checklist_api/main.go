@@ -5,11 +5,14 @@ import (
 	"checklist/checklist_api/handler"
 	"checklist/checklist_api/service"
 	"checklist/checklist_api/util"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	port := os.Getenv("PORT")
+
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 	router.Use(util.HeaderMiddleware())
@@ -28,6 +31,7 @@ func main() {
 	user.POST("/create", ch.HandleCreate)
 	user.POST("/update", ch.HandleUpdate)
 	user.DELETE("/delete", ch.HandleDelete)
+	user.DELETE("/account/delete", ah.HandleDelete)
 
-	router.Run(":8080")
+	router.Run(port)
 }

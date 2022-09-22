@@ -10,4 +10,5 @@ type AuthInterface interface {
 	Create(email, password string) (string, error)
 	Login(email, password string) (string, error)
 	Logout(userId string) error
+	Delete(userId string) error
 }

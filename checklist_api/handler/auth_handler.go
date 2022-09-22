@@ -81,3 +81,18 @@ func (ah AuthHandler) HandleLogout(c *gin.Context) {
 		Message: "success",
 	})
 }
+
+func (ah AuthHandler) HandleDelete(c *gin.Context) {
+	userId := c.GetString("userid")
+
+	err := ah.AI.Delete(userId)
+	if err != nil {
+		util.InternalServerError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, model.Response{
+		Status:  http.StatusOK,
+		Message: "success",
+	})
+}

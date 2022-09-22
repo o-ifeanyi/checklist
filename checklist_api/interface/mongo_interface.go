@@ -10,4 +10,5 @@ type MongoInterface interface {
 	Insert(col string, doc interface{}) error
 	Update(col string, filter interface{}, doc interface{}) error
 	Delete(col string, filter interface{}) error
+	DeleteAll(col string, filter interface{}) error
 }

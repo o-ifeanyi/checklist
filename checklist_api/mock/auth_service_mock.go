@@ -30,3 +30,7 @@ func (w AuthService) Logout(userId string) error {
 	args := w.Called(userId)
 	return args.Error(0)
 }
+func (w AuthService) Delete(userId string) error {
+	args := w.Called(userId)
+	return args.Error(0)
+}
