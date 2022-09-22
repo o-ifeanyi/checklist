@@ -1,3 +1,5 @@
+import 'package:checklist_app/env/secrets.dart';
+
 abstract class BaseConfig {
   String get baseUrl;
 }
@@ -9,5 +11,5 @@ class StagingEnv implements BaseConfig {
 
 class ProductionEnv implements BaseConfig {
   @override
-  String get baseUrl => '';
+  String get baseUrl => 'http://${Secrets.IPADDRESS}:8080/';
 }
