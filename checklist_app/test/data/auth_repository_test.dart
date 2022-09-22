@@ -82,4 +82,25 @@ void main() {
       expect(result, Left(customException));
     });
   });
+
+  group('Auth repository - Delete', () {
+    test('Should return true when successful', () async {
+      when(() => hiveService.setToken(any())).thenAnswer((_) => Future.value());
+      when(() => deleteFixture()).thenAnswer(
+        (_) => Future.value(Response(
+            statusCode: 200, requestOptions: RequestOptions(path: 'path'))),
+      );
+
+      final result = await authRepositoryImpl.delete();
+
+      expect(result, const Right(true));
+    });
+    test('Should return CustomException when it fails', () async {
+      when(() => deleteFixture()).thenThrow(customException);
+
+      final result = await authRepositoryImpl.delete();
+
+      expect(result, Left(customException));
+    });
+  });
 }

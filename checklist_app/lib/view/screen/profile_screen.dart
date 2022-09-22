@@ -1,3 +1,5 @@
+import 'package:checklist_app/core/platform_specific/dialog_loader.dart';
+import 'package:checklist_app/core/platform_specific/platform_alert_dialog.dart';
 import 'package:checklist_app/core/platform_specific/platform_icons.dart';
 import 'package:checklist_app/core/services/hive_service.dart';
 import 'package:checklist_app/core/util/config.dart';
@@ -6,6 +8,7 @@ import 'package:checklist_app/injection_container.dart';
 import 'package:checklist_app/provider/auth_provider.dart';
 import 'package:checklist_app/view/screen/auth_screen.dart';
 import 'package:checklist_app/view/widget/custom_list_tile.dart';
+import 'package:checklist_app/view/widget/delete_guidelines.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -77,6 +80,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     await _authProvider.logout().then((success) {
                       if (success) context.go(AuthScreen.route);
                     });
+                  },
+                ),
+                CustomListTile(
+                  iconData: AppIcons.delete,
+                  highlightColor: theme.errorColor,
+                  title: 'Delete account',
+                  onPressed: () async {
+                    final shouldDelete = await showModalBottomSheet<bool?>(
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (context) => SizedBox(
+                        height: Config.yMargin(context, 70),
+                        child: const DeleteGuidelines(),
+                      ),
+                    );
+                    if (shouldDelete == null) return;
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return PlatformAlertDialog(
+                          title: 'Are you sure?',
+                          content: Text(
+                            'This action cannot be reversed or canceled once initiated.',
+                            style: Config.b1(context),
+                          ),
+                          actions: [
+                            DialogAction(
+                              text: 'Cancel',
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            DialogAction(
+                              isDefaultAction: true,
+                              text: 'Continue',
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return DialogLoader(
+                                        function: _authProvider.delete(),
+                                      );
+                                    }).then((success) {
+                                  if (success == true)
+                                    context.go(AuthScreen.route);
+                                });
+                                ;
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ],

@@ -24,6 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +82,31 @@ class _AuthScreenState extends State<AuthScreen> {
                   setState(() {});
                 },
               ),
+              if (isRegister) ...[
+                SizedBox(height: Config.yMargin(context, 3)),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  style: Config.b1(context),
+                  obscureText: obscurePassword,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm password',
+                    errorStyle: Config.b2(context),
+                  ),
+                  validator: (val) {
+                    if (val == null || val.trim().isEmpty) {
+                      return 'password is required';
+                    } else if (val.trim() != _passwordController.text.trim()) {
+                      return 'password does not match';
+                    }
+                    return null;
+                  },
+                  onChanged: (val) async {
+                    setState(() {});
+                  },
+                ),
+              ],
               SizedBox(height: Config.yMargin(context, 1)),
               CheckboxListTile(
                 contentPadding: const EdgeInsets.all(0),

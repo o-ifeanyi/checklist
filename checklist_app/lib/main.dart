@@ -9,14 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  Env().initConfig();
   await init();
-
-  const String environment = String.fromEnvironment(
-    'env',
-    defaultValue: Env.staging,
-  );
-
-  Env().initConfig(environment);
 
   runApp(MultiProvider(
     providers: [

@@ -44,6 +44,7 @@ void main() {
       expect(result, equals(false));
     });
   });
+
   group('Auth Provider - Login', () {
     test('Should return true when successful', () async {
       when(
@@ -65,6 +66,7 @@ void main() {
       expect(result, equals(false));
     });
   });
+
   group('Auth Provider - Logout', () {
     test('Should return true when successful', () async {
       when(
@@ -82,6 +84,28 @@ void main() {
           Future.value(Left(CustomException(message: 'Failed to logout'))));
 
       final result = await authProvider.logout();
+
+      expect(result, equals(false));
+    });
+  });
+
+  group('Auth Provider - Delete', () {
+    test('Should return true when successful', () async {
+      when(
+        () => mockAuthRepository.delete(),
+      ).thenAnswer((_) => Future.value(const Right(true)));
+
+      final result = await authProvider.delete();
+
+      expect(result, equals(true));
+    });
+    test('Should return false when un-successful', () async {
+      when(
+        () => mockAuthRepository.delete(),
+      ).thenAnswer((_) =>
+          Future.value(Left(CustomException(message: 'Failed to logout'))));
+
+      final result = await authProvider.delete();
 
       expect(result, equals(false));
     });

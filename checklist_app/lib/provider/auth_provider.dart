@@ -63,4 +63,15 @@ class AuthProvider extends ChangeNotifier {
       (done) => done,
     );
   }
+
+  Future<bool> delete() async {
+    final logEither = await authRepository.delete();
+    return logEither.fold(
+      (exc) {
+        snackBarService.displayMessage(exc.message);
+        return false;
+      },
+      (done) => done,
+    );
+  }
 }

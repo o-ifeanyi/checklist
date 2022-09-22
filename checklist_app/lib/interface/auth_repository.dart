@@ -6,4 +6,5 @@ abstract class AuthRepository {
   Future<Either<CustomException, bool>> login(UserModel user);
   Future<Either<CustomException, bool>> logout();
   Future<Either<CustomException, bool>> register(UserModel user);
+  Future<Either<CustomException, bool>> delete();
 }

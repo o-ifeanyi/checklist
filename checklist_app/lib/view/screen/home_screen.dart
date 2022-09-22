@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen> {
   late ChecklistProvider _provider;
   late ValueListenable<Box<dynamic>> _checklistBox;
   List<ChecklistModel> checklists = [];
@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _provider = context.read<ChecklistProvider>();
-    WidgetsBinding.instance.addObserver(this);
     _checklistBox = Hive.box(kHiveBoxes.checklist.name).listenable();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _provider.getAll().then((_) => checklists = _provider.allChecklist);
@@ -45,17 +44,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _checklistBox.removeListener(() {});
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      _provider.sync();
-    }
   }
 
   @override
