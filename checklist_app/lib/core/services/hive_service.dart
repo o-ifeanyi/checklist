@@ -14,6 +14,12 @@ class HiveService {
     required this.syncBox,
   });
 
+  Future<void> clearAll() async {
+    await appDataBox.clear();
+    await checklistBox.clear();
+    await syncBox.clear();
+  }
+
   Future<void> setToken(String token) async {
     return appDataBox.put('token', token);
   }
