@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  api:
+    build: ./checklist_api
+    container_name: checklist_api_c
+    ports:
+      - '8080:8080'
