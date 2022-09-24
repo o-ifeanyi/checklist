@@ -8,7 +8,7 @@ import 'package:checklist_app/provider/checklist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+Future<void> main() async {
   Env().initConfig();
   await init();
 
@@ -28,15 +28,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final _router = AppRoute.router;
     return AppAware(
-      child: Consumer<AuthProvider>(builder: (context, provider, child) {
-        return MaterialApp.router(
-          routeInformationProvider: _router.routeInformationProvider,
-          routeInformationParser: _router.routeInformationParser,
-          routerDelegate: _router.routerDelegate,
-          title: 'Checklist',
-          theme: themeOptions[provider.currentTheme],
-        );
-      }),
+      child: Consumer<AuthProvider>(
+        builder: (context, provider, child) {
+          return MaterialApp.router(
+            routeInformationProvider: _router.routeInformationProvider,
+            routeInformationParser: _router.routeInformationParser,
+            routerDelegate: _router.routerDelegate,
+            title: 'Checklist',
+            theme: themeOptions[provider.currentTheme],
+          );
+        },
+      ),
     );
   }
 }
