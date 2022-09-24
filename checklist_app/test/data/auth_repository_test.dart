@@ -85,6 +85,7 @@ void main() {
 
   group('Auth repository - Delete', () {
     test('Should return true when successful', () async {
+      when(() => hiveService.clearAll()).thenAnswer((_) => Future.value());
       when(() => hiveService.setToken(any())).thenAnswer((_) => Future.value());
       when(() => deleteFixture()).thenAnswer(
         (_) => Future.value(Response(
