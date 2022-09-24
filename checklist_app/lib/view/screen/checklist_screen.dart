@@ -58,6 +58,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  key: const ValueKey('title_field'),
                   initialValue: checklist.title,
                   style: Config.h2(context),
                   decoration: InputDecoration(
@@ -69,51 +70,52 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                     checklist = checklist.copyWith(title: val);
                   },
                 ),
-                ...checklist.undone
-                    .map(
-                      (e) => CheckboxListTile(
-                        key: ValueKey(e.hashCode),
-                        contentPadding: const EdgeInsets.all(0),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: TextFormField(
-                          initialValue: e.text,
-                          style: Config.b1(context),
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                final items = checklist.items..remove(e);
-                                checklist = checklist.copyWith(items: items);
-                                setState(() {});
-                              },
-                              icon: Icon(AppIcons.clear, size: 20),
-                            ),
+                ...checklist.undone.map(
+                  (item) {
+                    return CheckboxListTile(
+                      key: ValueKey('${item.id}'),
+                      contentPadding: const EdgeInsets.all(0),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: TextFormField(
+                        initialValue: item.text,
+                        style: Config.b1(context),
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              final items = checklist.items..remove(item);
+                              checklist = checklist.copyWith(items: items);
+                              setState(() {});
+                            },
+                            icon: Icon(AppIcons.clear, size: 20),
                           ),
-                          onChanged: (val) {
-                            final items = checklist.items;
-                            final index = items.indexOf(e);
-                            items.replaceRange(
-                                index, index + 1, [e.copyWith(text: val)]);
-                            checklist = checklist.copyWith(items: items);
-                          },
                         ),
-                        value: e.done,
                         onChanged: (val) {
-                          if (val == null) return;
                           final items = checklist.items;
-                          final index = items.indexOf(e);
+                          final index = items.indexOf(item);
                           items.replaceRange(
-                              index, index + 1, [e.copyWith(done: val)]);
+                              index, index + 1, [item.copyWith(text: val)]);
                           checklist = checklist.copyWith(items: items);
-                          setState(() {});
                         },
                       ),
-                    )
-                    .toList(),
+                      value: item.done,
+                      onChanged: (val) {
+                        if (val == null) return;
+                        final items = checklist.items;
+                        final index = items.indexOf(item);
+                        items.replaceRange(
+                            index, index + 1, [item.copyWith(done: val)]);
+                        checklist = checklist.copyWith(items: items);
+                        setState(() {});
+                      },
+                    );
+                  },
+                ).toList(),
                 ListTile(
+                  key: const ValueKey('add_new_item_button'),
                   onTap: () {
                     final items = checklist.items;
                     items.add(ChecklistItemModel(
@@ -128,41 +130,41 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   ),
                 ),
                 if (checklist.done.isNotEmpty) ...[
-                  const Divider(thickness: 1),
-                  ...checklist.done
-                      .map(
-                        (e) => CheckboxListTile(
-                          key: ValueKey(e.hashCode),
-                          activeColor: Theme.of(context).backgroundColor,
-                          contentPadding: const EdgeInsets.all(0),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: TextFormField(
-                            readOnly: true,
-                            initialValue: e.text,
-                            style: Config.b1(context).copyWith(
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                            ),
-                            onChanged: (_) {},
+                  const Divider(key: ValueKey('divider'), thickness: 1),
+                  ...checklist.done.map(
+                    (item) {
+                      return CheckboxListTile(
+                        key: ValueKey('${item.id}'),
+                        activeColor: Theme.of(context).backgroundColor,
+                        contentPadding: const EdgeInsets.all(0),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: TextFormField(
+                          readOnly: true,
+                          initialValue: item.text,
+                          style: Config.b1(context).copyWith(
+                            decoration: TextDecoration.lineThrough,
                           ),
-                          value: e.done,
-                          onChanged: (val) {
-                            if (val == null) return;
-                            final items = checklist.items;
-                            final index = items.indexOf(e);
-                            items.remove(e);
-                            items.insert(index, e.copyWith(done: val));
-                            checklist = checklist.copyWith(items: items);
-                            setState(() {});
-                          },
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                          ),
+                          onChanged: (_) {},
                         ),
-                      )
-                      .toList(),
+                        value: item.done,
+                        onChanged: (val) {
+                          if (val == null) return;
+                          final items = checklist.items;
+                          final index = items.indexOf(item);
+                          items.remove(item);
+                          items.insert(index, item.copyWith(done: val));
+                          checklist = checklist.copyWith(items: items);
+                          setState(() {});
+                        },
+                      );
+                    },
+                  ).toList(),
                 ],
               ],
             ),

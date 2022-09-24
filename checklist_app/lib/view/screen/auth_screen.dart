@@ -45,6 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
               Text('Checklist', style: Config.h1(context)),
               SizedBox(height: Config.yMargin(context, 4)),
               TextFormField(
+                key: const ValueKey('email_field'),
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 style: Config.b1(context),
@@ -64,6 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               SizedBox(height: Config.yMargin(context, 3)),
               TextFormField(
+                key: const ValueKey('password_field'),
                 controller: _passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 style: Config.b1(context),
@@ -85,6 +87,7 @@ class _AuthScreenState extends State<AuthScreen> {
               if (isRegister) ...[
                 SizedBox(height: Config.yMargin(context, 3)),
                 TextFormField(
+                  key: const ValueKey('confirm_password_field'),
                   controller: _confirmPasswordController,
                   keyboardType: TextInputType.visiblePassword,
                   style: Config.b1(context),
@@ -127,6 +130,7 @@ class _AuthScreenState extends State<AuthScreen> {
               Consumer2<AuthProvider, ChecklistProvider>(
                 builder: (context, auth, check, child) {
                   return AnimatedSwitcher(
+                    key: const ValueKey('auth_button'),
                     duration: const Duration(milliseconds: 300),
                     child: auth.authState == AuthState.register ||
                             auth.authState == AuthState.login ||
@@ -168,6 +172,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     style: Config.b2(context),
                   ),
                   GestureDetector(
+                    key: const ValueKey('auth_switch_button'),
                     onTap: () {
                       setState(() {
                         isRegister = !isRegister;

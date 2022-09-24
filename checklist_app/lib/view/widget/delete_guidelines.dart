@@ -41,6 +41,7 @@ class DeleteGuidelines extends StatelessWidget {
               style: Config.b2(context)),
           SizedBox(height: Config.yMargin(context, 2)),
           AuthButton(
+            key: const ValueKey('continue_delete_acc_button'),
             hPadding: 0,
             text: 'I understand',
             onpressed: () => Navigator.pop(context, true),

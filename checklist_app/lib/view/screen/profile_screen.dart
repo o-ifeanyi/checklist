@@ -74,6 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: Config.yMargin(context, 1)),
                 CustomListTile(
+                  key: const ValueKey('logout_button'),
                   iconData: AppIcons.logout,
                   title: 'Logout',
                   onPressed: () async {
@@ -83,6 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 CustomListTile(
+                  key: const ValueKey('delete_acc_button'),
                   iconData: AppIcons.delete,
                   highlightColor: theme.errorColor,
                   title: 'Delete account',
@@ -121,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     barrierDismissible: false,
                                     builder: (context) {
                                       return DialogLoader(
-                                        function: _authProvider.delete(),
+                                        function: _authProvider.delete,
                                       );
                                     }).then((success) {
                                   if (success == true)

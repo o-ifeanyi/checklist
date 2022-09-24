@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const Spacer(),
                         GestureDetector(
+                          key: const ValueKey('delete_button'),
                           onTap: () {
                             _provider.delete(_provider.marked).then((sucess) {
                               _provider.markAll(false);
@@ -100,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            key: const ValueKey('search_field'),
                             keyboardType: TextInputType.emailAddress,
                             style: Config.b1(context),
                             decoration: InputDecoration(
@@ -125,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(width: 20),
                         GestureDetector(
+                          key: const ValueKey('profile_button'),
                           onTap: () => context.push(ProfileScreen.route),
                           child: Icon(
                             AppIcons.setting,
@@ -159,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        key: const ValueKey('add_button'),
         child: Icon(AppIcons.add, size: 40),
         onPressed: () => context.push(ChecklistScreen.route),
       ),
