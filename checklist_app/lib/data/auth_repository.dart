@@ -66,6 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<CustomException, bool>> delete() async {
     try {
       await networkService.delete(path: 'user/account/delete');
+      await hiveService.clearAll();
       await hiveService.setToken('');
       return const Right(true);
     } on CustomException catch (e) {
