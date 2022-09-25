@@ -1,16 +1,28 @@
-# checklist_app
+# Checklist App
 
-A new Flutter project.
+This is project built to consume the [checklist_api](https://github.com/o-ifeanyi/checklist/tree/master/checklist_api)
 
-## Getting Started
+### Environment setup
+This is a Flutter application and requires you have flutter installed on your computer. 
 
-This project is a starting point for a Flutter application.
+### Flutter installation
+You should follow the [Flutter installation guide here](https://flutter.dev/docs/get-started/install)
 
-A few resources to get you started if this is your first Flutter project:
+### Setting up locally 
+- Clone the repo locally
+- Navigate to the folder and run `flutter pub get` to install the required dart packages
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Running the application
+Simply run `flutter run` command from the terminal
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Running the test
+Simply run `flutter run test` which would run both the unit and widget test
+
+### Running integration test
+- Use the following command to run the integration test `flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart`
+
+NB: You should already have an emulator running
+
+- To run the integration test on a physical device (android), navigate to the android folder in the project `cd android` and run `gradlew app:connectedAndroidTest -Ptarget=`pwd`/../integration_test/app_test.dart`
+
+NB: running on a physical android device needs to be done from android studio
