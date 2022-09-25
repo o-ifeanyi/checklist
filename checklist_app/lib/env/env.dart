@@ -15,6 +15,9 @@ class Env {
   BaseConfig get config => _config;
 
   initConfig() {
-    _config = kDebugMode ? StagingEnv() : ProductionEnv();
+    if (kIsWeb)
+      _config = ProductionEnv();
+    else
+      _config = kDebugMode ? StagingEnv() : ProductionEnv();
   }
 }
