@@ -15,17 +15,21 @@ class ConnectionService {
     required this.checklistRepository,
   }) {
     connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      // only act on new data if it's different from previous data
       if (result != _connectivityResult) {
         _connectivityStreamController.add(result);
-        _connectivityResult = result;
       }
       switch (result) {
         case ConnectivityResult.mobile:
         case ConnectivityResult.wifi:
-          sl<ChecklistProvider>().sync();
+          if (result != _connectivityResult) {
+            sl<ChecklistProvider>().sync();
+          }
           break;
         default:
       }
+      // set previous data to new data
+      _connectivityResult = result;
     });
   }
 
