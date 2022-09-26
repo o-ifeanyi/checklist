@@ -7,6 +7,7 @@ import 'package:checklist_app/provider/auth_provider.dart';
 import 'package:checklist_app/provider/checklist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'package:device_preview/device_preview.dart';
 
 Future<void> main() async {
   Env().initConfig();
@@ -17,6 +18,11 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => sl<AuthProvider>()),
       ChangeNotifierProvider(create: (_) => sl<ChecklistProvider>()),
     ],
+    // Uncomment to run in preview mode
+    // child: DevicePreview(
+    //   enabled: true,
+    //   builder: (context) => const MyApp(),
+    // ),
     child: const MyApp(),
   ));
 }
