@@ -11,5 +11,5 @@ class StagingEnv implements BaseConfig {
 
 class ProductionEnv implements BaseConfig {
   @override
-  String get baseUrl => 'http://${Secrets.PRODBASEURL}/';
+  String get baseUrl => 'https://${Secrets.PRODBASEURL}/';
 }
