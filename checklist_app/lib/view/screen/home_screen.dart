@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: Config.contentPadding(context),
                   itemCount: checklists.length,
                   gridDelegate: SliverSimpleGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: Config.xMargin(context, 50),
+                    maxCrossAxisExtent: Config.xMargin(context, 70),
                   ),
                   crossAxisSpacing: Config.xMargin(context, 3),
                   mainAxisSpacing: Config.yMargin(context, 2),
