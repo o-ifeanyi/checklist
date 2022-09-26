@@ -18,6 +18,7 @@ class ChecklistScreen extends StatefulWidget {
 
 class _ChecklistScreenState extends State<ChecklistScreen> {
   final _formKey = GlobalKey<FormState>();
+  late Map<String, FocusNode> _focus;
   late ChecklistModel checklist;
   late bool isUpdate;
   @override
@@ -36,6 +37,25 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
         ],
       );
     }
+    _focus = {};
+    checklist.undone.forEach((item) {
+      _focus[item.id] = FocusNode();
+    });
+  }
+
+  void _addNewItem() {
+    final items = checklist.items;
+    final focus = FocusNode();
+    final checklistItem = ChecklistItemModel(
+      id: const Uuid().v4(),
+      text: '',
+      done: false,
+    );
+    items.add(checklistItem);
+    _focus[checklistItem.id] = focus;
+    checklist = checklist.copyWith(items: items);
+    setState(() {});
+    focus.requestFocus();
   }
 
   @override
@@ -60,15 +80,20 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                 TextFormField(
                   key: const ValueKey('title_field'),
                   initialValue: checklist.title,
+                  autofocus: checklist.title == 'title',
                   style: Config.h2(context),
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     errorStyle: Config.b2(context),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                   ),
                   onChanged: (val) {
-                    checklist = checklist.copyWith(title: val);
+                    checklist = checklist.copyWith(title: val.trim());
                   },
+                  onFieldSubmitted: (_) =>
+                      _focus[checklist.undone.first.id]?.requestFocus(),
                 ),
                 ...checklist.undone.map(
                   (item) {
@@ -78,8 +103,10 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                       controlAffinity: ListTileControlAffinity.leading,
                       title: TextFormField(
                         initialValue: item.text,
+                        focusNode: _focus[item.id],
                         style: Config.b1(context),
-                        keyboardType: TextInputType.multiline,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
                         maxLines: null,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -88,6 +115,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                             onPressed: () {
                               final items = checklist.items..remove(item);
                               checklist = checklist.copyWith(items: items);
+                              _focus.removeWhere((key, _) => key == item.id);
                               setState(() {});
                             },
                             icon: Icon(AppIcons.clear, size: 20),
@@ -96,10 +124,11 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                         onChanged: (val) {
                           final items = checklist.items;
                           final index = items.indexOf(item);
-                          items.replaceRange(
-                              index, index + 1, [item.copyWith(text: val)]);
+                          items.replaceRange(index, index + 1,
+                              [item.copyWith(text: val.trim())]);
                           checklist = checklist.copyWith(items: items);
                         },
+                        onFieldSubmitted: (_) => _addNewItem(),
                       ),
                       value: item.done,
                       onChanged: (val) {
@@ -116,13 +145,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                 ).toList(),
                 ListTile(
                   key: const ValueKey('add_new_item_button'),
-                  onTap: () {
-                    final items = checklist.items;
-                    items.add(ChecklistItemModel(
-                        id: const Uuid().v4(), text: '', done: false));
-                    checklist = checklist.copyWith(items: items);
-                    setState(() {});
-                  },
+                  onTap: _addNewItem,
                   leading: Icon(AppIcons.add),
                   title: Text(
                     'Add item',
