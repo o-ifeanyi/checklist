@@ -25,16 +25,11 @@ class DeleteGuidelines extends StatelessWidget {
               style: Config.h3b(context)),
           SizedBox(height: Config.yMargin(context, 2)),
           const Point(
-            text: 'Your profile, including any unused cash or gold goin.',
+            text: 'Your account on all platforms.',
           ),
           SizedBox(height: Config.yMargin(context, 2)),
           const Point(
-            text:
-                'Any game you created including games in draft, review or published games.',
-          ),
-          SizedBox(height: Config.yMargin(context, 2)),
-          const Point(
-            text: 'Notifications for you and reviews you posted.',
+            text: 'All list you have created.',
           ),
           const Spacer(),
           Text('Note: This action might take a while',
