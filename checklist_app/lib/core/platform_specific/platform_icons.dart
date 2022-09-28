@@ -9,4 +9,5 @@ class AppIcons {
   static get logout => Iconsax.logout;
   static get clear => Icons.clear_rounded;
   static get search => Iconsax.search_normal_14;
+  static get note => Iconsax.clipboard_tick;
 }
