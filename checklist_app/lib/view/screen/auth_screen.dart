@@ -19,7 +19,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  bool isRegister = true;
+  bool isRegister = false;
   bool obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -57,7 +57,12 @@ class _AuthScreenState extends State<AuthScreen> {
                 validator: (val) {
                   if (val == null || val.trim().isEmpty)
                     return 'email is required';
-                  return null;
+                  const emailRegex =
+                      r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""";
+                  if (RegExp(emailRegex).hasMatch(val)) {
+                    return null;
+                  }
+                  return 'invalid email';
                 },
                 onChanged: (val) async {
                   setState(() {});
