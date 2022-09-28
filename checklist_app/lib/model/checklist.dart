@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:checklist_app/core/constants/constants.dart';
-import 'package:checklist_app/core/util/config.dart';
-import 'package:flutter/material.dart';
 
 enum SyncAction { synched, create, delete, update }
 
@@ -32,29 +28,6 @@ class ChecklistModel {
 
   List<ChecklistItemModel> get done =>
       this.items.where((item) => item.done).toList();
-
-  double extent(BuildContext context) {
-    final maxi = Config.yMargin(context, 30);
-    final double e;
-    switch (undone.length) {
-      case 0:
-        e = 0.6;
-        break;
-      case 1:
-        e = 1;
-        break;
-      case 2:
-        e = 1.4;
-        break;
-      case 3:
-        e = 1.8;
-        break;
-      default:
-        e = 2.2;
-    }
-    final extent = e * Config.textSize(context, 12);
-    return min(maxi, extent);
-  }
 
   ChecklistModel copyWith({
     String? title,
