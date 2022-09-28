@@ -31,7 +31,6 @@ class ChecklistItem extends StatelessWidget {
       },
       child: Container(
         padding: Config.contentPadding(context, h: 3, v: 1),
-        height: checklist.extent(context),
         decoration: BoxDecoration(
           border: Border.all(
             width: provider.marked.contains(checklist) ? 2 : 1,
@@ -43,7 +42,7 @@ class ChecklistItem extends StatelessWidget {
           color: theme.colorScheme.secondary.withOpacity(0.2),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               checklist.title,
@@ -68,6 +67,22 @@ class ChecklistItem extends StatelessWidget {
                   ),
                 )
                 .toList(),
+            if (checklist.undone.length > 4) ...[
+              SizedBox(height: Config.yMargin(context, 1)),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: theme.scaffoldBackgroundColor,
+                ),
+                child: Text(
+                  '+ ${checklist.undone.length - 4} more',
+                  overflow: TextOverflow.ellipsis,
+                  style: Config.b2(context),
+                ),
+              ),
+            ]
           ],
         ),
       ),
