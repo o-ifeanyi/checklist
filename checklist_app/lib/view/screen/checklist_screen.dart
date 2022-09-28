@@ -82,6 +82,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   initialValue: checklist.title,
                   autofocus: checklist.title == 'title',
                   style: Config.h2(context),
+                  maxLines: null,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
