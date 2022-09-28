@@ -143,19 +143,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   await _provider.sync();
                   return;
                 },
-                child: MasonryGridView.builder(
-                  padding: Config.contentPadding(context),
-                  itemCount: checklists.length,
-                  gridDelegate: SliverSimpleGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: Config.xMargin(context, 70),
-                  ),
-                  crossAxisSpacing: Config.xMargin(context, 3),
-                  mainAxisSpacing: Config.yMargin(context, 2),
-                  itemBuilder: (context, index) {
-                    final checklist = checklists[index];
-                    return ChecklistItem(checklist: checklist);
-                  },
-                ),
+                child: checklists.isEmpty
+                    ? Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              AppIcons.note,
+                              size: Config.yMargin(context, 8),
+                            ),
+                            const SizedBox(height: 15),
+                            Text(
+                              'Nothing to see here',
+                              style: Config.h2(context),
+                            ),
+                            SizedBox(height: Config.yMargin(context, 10))
+                          ],
+                        ),
+                      )
+                    : MasonryGridView.builder(
+                        padding: Config.contentPadding(context),
+                        itemCount: checklists.length,
+                        gridDelegate:
+                            SliverSimpleGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: Config.xMargin(context, 70),
+                        ),
+                        crossAxisSpacing: Config.xMargin(context, 3),
+                        mainAxisSpacing: Config.yMargin(context, 2),
+                        itemBuilder: (context, index) {
+                          final checklist = checklists[index];
+                          return ChecklistItem(checklist: checklist);
+                        },
+                      ),
               ),
             ),
           ],
