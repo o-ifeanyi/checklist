@@ -63,6 +63,9 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
     final provider = context.read<ChecklistProvider>();
     return WillPopScope(
       onWillPop: () {
+        final validItems =
+            checklist.items.where((item) => item.text.isNotEmpty).toList();
+        checklist = checklist.copyWith(items: validItems);
         if (isUpdate)
           provider.update(checklist);
         else
@@ -146,8 +149,12 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                 ).toList(),
                 ListTile(
                   key: const ValueKey('add_new_item_button'),
+                  contentPadding: const EdgeInsets.all(0),
                   onTap: _addNewItem,
-                  leading: Icon(AppIcons.add),
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Icon(AppIcons.add),
+                  ),
                   title: Text(
                     'Add item',
                     style: Config.b1(context),
