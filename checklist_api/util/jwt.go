@@ -1,13 +1,14 @@
 package util
 
 import (
+	"os"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
 var (
-	SecretKey = []byte("secret")
+	SecretKey = []byte(os.Getenv("JWT_SECRET"))
 )
 
 func GenerateToken(userID string) (string, error) {
