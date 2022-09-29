@@ -3,7 +3,7 @@
 This is a project built to practice what I've earnt with Go. This API is consumed by [checklist_app](https://github.com/o-ifeanyi/checklist/tree/master/checklist_app)
 
 ### Environment setup
-This is a Flutter application and requires you to have Go or Docker and mongodb installed on your computer. 
+This is a Flutter application and requires you to have Go or Docker and mongodb installed on your computer.
 
 ### Go installation
 You should follow the [Flutter installation guide here](https://flutter.dev/docs/get-started/install)
@@ -11,6 +11,13 @@ You should follow the [Flutter installation guide here](https://flutter.dev/docs
 ### Setting up locally 
 - Clone the repo locally
 - Navigate to the folder and run `go get -d` to install the required dependencies
+
+### ENV content 
+- PORT
+- APP_ENV
+- GIN_MODE
+- JWT_SECRET
+- MONGO_URI
 
 ### Running the application
 Simply run `go run main.go` command from the terminal
