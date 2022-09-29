@@ -10,4 +10,6 @@ class AppIcons {
   static get clear => Icons.clear_rounded;
   static get search => Iconsax.search_normal_14;
   static get note => Iconsax.clipboard_tick;
+  static get privacy => Iconsax.lock;
+  static get terms => Iconsax.note_2;
 }
