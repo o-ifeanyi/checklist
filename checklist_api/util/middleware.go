@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,9 +27,10 @@ func AuthMiddleware() gin.HandlerFunc {
 
 func HeaderMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Status(http.StatusOK)
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE")
-		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 		c.Next()
 	}
 }
