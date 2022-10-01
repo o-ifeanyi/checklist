@@ -5,6 +5,7 @@ import 'package:checklist_app/env/env.dart';
 import 'package:checklist_app/injection_container.dart';
 import 'package:checklist_app/provider/auth_provider.dart';
 import 'package:checklist_app/provider/checklist_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:device_preview/device_preview.dart';
@@ -12,6 +13,10 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   Env().initConfig();
   await init();
+
+  if (kIsWeb || kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
 
   runApp(MultiProvider(
     providers: [
