@@ -32,7 +32,7 @@ class PrivacyPolicy extends StatelessWidget {
               SizedBox(height: Config.yMargin(context, 2)),
               Text(
                 '''
-Onuoha Ifeanyi built the Cardflix app as a Free app. This SERVICE is provided by Onuoha Ifeanyi at no cost and is intended for use as is.
+Onuoha Ifeanyi built the Checklist app as a Free app. This SERVICE is provided by Onuoha Ifeanyi at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
 

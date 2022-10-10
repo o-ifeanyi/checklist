@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	m "github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSync(t *testing.T) {
@@ -20,7 +20,7 @@ func TestSync(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		_, err := cs.Sync("userid", checklists)
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -30,7 +30,7 @@ func TestSync(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		_, err := cs.Sync("userid", checklists)
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -44,7 +44,7 @@ func TestGetAll(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		_, err := cs.GetAll("userid")
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -54,7 +54,7 @@ func TestGetAll(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		_, err := cs.GetAll("userid")
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -68,7 +68,7 @@ func TestCreatee(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Create(checklist)
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -78,7 +78,7 @@ func TestCreatee(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Create(checklist)
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -92,7 +92,7 @@ func TestUpdate(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Update(checklist)
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -102,7 +102,7 @@ func TestUpdate(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Update(checklist)
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -116,7 +116,7 @@ func TestDelete(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Delete(checklist.Id)
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -126,6 +126,6 @@ func TestDelete(t *testing.T) {
 		cs := ChecklistService{ms}
 
 		err := cs.Delete(checklist.Id)
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }

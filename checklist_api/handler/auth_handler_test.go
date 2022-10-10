@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestHandleRegister(t *testing.T) {
@@ -37,9 +37,9 @@ func TestHandleRegister(t *testing.T) {
 			Message: "success",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, "token", w.Header().Get("Token"))
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, "token", w.Header().Get("Token"))
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 
 	t.Run("expect 500 on error", func(t *testing.T) {
@@ -57,8 +57,8 @@ func TestHandleRegister(t *testing.T) {
 			Message: "failed",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 }
 
@@ -87,9 +87,9 @@ func TestHandleLogin(t *testing.T) {
 			Message: "success",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, "token", w.Header().Get("Token"))
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, "token", w.Header().Get("Token"))
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 
 	t.Run("expect 500 on error", func(t *testing.T) {
@@ -109,8 +109,8 @@ func TestHandleLogin(t *testing.T) {
 			Message: "failed",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 }
 
@@ -134,9 +134,9 @@ func TestHandleLogout(t *testing.T) {
 			Message: "success",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, "", w.Header().Get("Token"))
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, "", w.Header().Get("Token"))
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 
 	t.Run("expect 500 on error", func(t *testing.T) {
@@ -156,8 +156,8 @@ func TestHandleLogout(t *testing.T) {
 			Message: "failed",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 }
 
@@ -181,9 +181,9 @@ func TestHandleAccountDelete(t *testing.T) {
 			Message: "success",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, "", w.Header().Get("Token"))
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, "", w.Header().Get("Token"))
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 
 	t.Run("expect 500 on error", func(t *testing.T) {
@@ -203,7 +203,7 @@ func TestHandleAccountDelete(t *testing.T) {
 			Message: "failed",
 		}
 		expJson, _ := json.Marshal(exp)
-		assert.Equal(t, exp.Status, w.Code)
-		assert.Equal(t, expJson, w.Body.Bytes())
+		require.Equal(t, exp.Status, w.Code)
+		require.Equal(t, expJson, w.Body.Bytes())
 	})
 }

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	m "github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFindById(t *testing.T) {
@@ -20,7 +20,7 @@ func TestFindById(t *testing.T) {
 		as := AuthService{ms}
 
 		_, err := as.FindById(user.Id)
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -30,7 +30,7 @@ func TestFindById(t *testing.T) {
 		as := AuthService{ms}
 
 		_, err := as.FindById(user.Id)
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -44,7 +44,7 @@ func TestFindByEmail(t *testing.T) {
 		as := AuthService{ms}
 
 		_, err := as.FindByEmail(user.Email)
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -54,7 +54,7 @@ func TestFindByEmail(t *testing.T) {
 		as := AuthService{ms}
 
 		_, err := as.FindByEmail(user.Email)
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -69,8 +69,8 @@ func TestCreate(t *testing.T) {
 		as := AuthService{ms}
 
 		token, err := as.Create("email", "123456")
-		assert.NotEmpty(t, token)
-		assert.ErrorIs(t, err, nil)
+		require.NotEmpty(t, token)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return empty token and err on error", func(t *testing.T) {
@@ -81,8 +81,8 @@ func TestCreate(t *testing.T) {
 		as := AuthService{ms}
 
 		token, err := as.Create("email", "123456")
-		assert.Empty(t, token)
-		assert.NotEmpty(t, err)
+		require.Empty(t, token)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -97,8 +97,8 @@ func TestLogin(t *testing.T) {
 		as := AuthService{ms}
 
 		token, err := as.Login("email", "123456")
-		assert.NotEmpty(t, token)
-		assert.ErrorIs(t, err, nil)
+		require.NotEmpty(t, token)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return empty token and err on error", func(t *testing.T) {
@@ -109,8 +109,8 @@ func TestLogin(t *testing.T) {
 		as := AuthService{ms}
 
 		token, err := as.Login("email", "123456")
-		assert.Empty(t, token)
-		assert.NotEmpty(t, err)
+		require.Empty(t, token)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -125,7 +125,7 @@ func TestLogout(t *testing.T) {
 		as := AuthService{ms}
 
 		err := as.Logout("id")
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -136,7 +136,7 @@ func TestLogout(t *testing.T) {
 		as := AuthService{ms}
 
 		err := as.Logout("id")
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
 
@@ -152,7 +152,7 @@ func TestDeleteUser(t *testing.T) {
 		as := AuthService{ms}
 
 		err := as.Delete("id")
-		assert.ErrorIs(t, err, nil)
+		require.ErrorIs(t, err, nil)
 	})
 
 	t.Run("return err on error", func(t *testing.T) {
@@ -164,6 +164,6 @@ func TestDeleteUser(t *testing.T) {
 		as := AuthService{ms}
 
 		err := as.Delete("id")
-		assert.NotEmpty(t, err)
+		require.NotEmpty(t, err)
 	})
 }
