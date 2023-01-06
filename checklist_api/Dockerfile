@@ -1,12 +1,11 @@
-FROM golang:1.19
-
-WORKDIR /checklist_api
-
+FROM golang:1.19-alpine3.17 AS builder
+WORKDIR /app
 COPY . .
+RUN go build -o main main.go
 
-RUN go get -d
-RUN go build
+FROM alpine:3.17
+WORKDIR /app
+COPY --from=builder /app/main .
 
 EXPOSE 8080
-
-CMD ["./checklist_api", "-env=prod"]
+CMD [ "/app/main", "-env=prod" ]
